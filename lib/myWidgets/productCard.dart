@@ -19,15 +19,17 @@ class ProductCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   State<ProductCard> createState() => ProductCardState(
-        title: title,
-        subtitle: subtitle,
-        price: price,
-        quantity: quantity,
-      );
+      title: title, subtitle: subtitle, price: price, quantity: quantity);
 }
 
 class ProductCardState extends State<ProductCard> {
+  final String title;
+  final String subtitle;
+  int quantity;
+  final int price;
+
   ProductCardState({
     required this.title,
     required this.subtitle,
@@ -35,15 +37,19 @@ class ProductCardState extends State<ProductCard> {
     required this.quantity,
     Key? key,
   });
-  final String title;
-  final String subtitle;
-  final int quantity;
-  final int price;
-  var quantityController = TextEditingController(text: '0');
+
+  TextEditingController quantityController = TextEditingController(text: '0');
+  @override
+  void initState() {
+    quantityController.text = quantity.toString();
+    // TODO: implement initState
+    super.initState();
+  }
 
   bool _isEnabled = false;
-  callbackFunction(bool val) => {setState(() => _isEnabled = val)};
+  bool _ispressed = false;
 
+  buttonState(bool val) => {setState(() => _isEnabled = val)};
   void _handleTap(String tap) {
     if (quantityController.text == "") {
       quantityController.text = "0";
@@ -59,19 +65,15 @@ class ProductCardState extends State<ProductCard> {
       });
     }
 
-    if (int.parse(quantityController.text) > 0) {
-      callbackFunction(false);
+    if (int.parse(quantityController.text) == quantity) {
+      buttonState(false);
     } else {
-      callbackFunction(true);
+      buttonState(true);
     }
   }
 
-  bool is_pressed = false;
-
   final dishImage =
       "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/malika%2FRectangle%2013.png?alt=media&token=6a5f056c-417c-48d3-b737-f448e4f13321";
-
-  final orangeColor = const Color(0xffFF8527);
 
   @override
   Widget build(BuildContext context) {
@@ -79,30 +81,30 @@ class ProductCardState extends State<ProductCard> {
       2,
       Column(
         children: [
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            elevation: 10,
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: Column(
-              children: [
-                Slidable(
-                  actionPane: SlidableDrawerActionPane(),
-                  actionExtentRatio: 0.25,
-                  secondaryActions: <Widget>[
-                    IconSlideAction(
-                      caption: 'Delete',
-                      color: Colors.red,
-                      icon: Icons.delete,
-                      onTap: () {
-                        print('4');
-                      },
-                    ),
-                  ],
-                  child: ListTile(
+          Slidable(
+            actionPane: SlidableDrawerActionPane(),
+            actionExtentRatio: 0.25,
+            secondaryActions: <Widget>[
+              IconSlideAction(
+                caption: 'Delete',
+                color: Colors.red,
+                icon: Icons.delete,
+                onTap: () {
+                  print('4');
+                },
+              ),
+            ],
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              elevation: 10,
+              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Column(
+                children: [
+                  ListTile(
                     onTap: () {
                       setState(() {
-                        is_pressed = !is_pressed;
+                        _ispressed = !_ispressed;
                       });
                     },
                     leading: ClipRRect(
@@ -115,43 +117,67 @@ class ProductCardState extends State<ProductCard> {
                     trailing: Text('$price\nSDG'),
                     isThreeLine: true,
                   ),
-                ),
-                is_pressed == true
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                              onPressed: () => _handleTap('-'),
-                              child: Text("-")),
-                          SizedBox(
-                            width: 30,
-                            child: TextField(
-                              controller: quantityController,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^[1-9][0-9]*'))
+                  _ispressed == true
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('Quantity'),
+                            Row(
+                              children: [
+                                TextButton(
+                                    onPressed: () => _handleTap('-'),
+                                    child: Text(
+                                      "-",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              12),
+                                    )),
+                                SizedBox(
+                                  width: 30,
+                                  child: TextField(
+                                    controller: quantityController,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^[1-9][0-9]*'))
+                                    ],
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                TextButton(
+                                    onPressed: () => _handleTap('+'),
+                                    child: Text(
+                                      "+",
+                                      style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              18),
+                                    )),
                               ],
-                              textAlign: TextAlign.center,
                             ),
-                          ),
-                          TextButton(
-                              onPressed: () => _handleTap('+'),
-                              child: Text("+")),
-                        ],
-                      )
-                    : Container()
-              ],
+                          ],
+                        )
+                      : Container()
+                ],
+              ),
             ),
           ),
-          is_pressed == true
+          _ispressed == true
               ? Align(
                   alignment: AlignmentDirectional.bottomCenter,
                   child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        is_pressed = false;
-                      });
-                    },
+                    onPressed: _isEnabled
+                        ? () {
+                            setState(() {
+                              quantity = int.parse(quantityController.text);
+                              buttonState(false);
+                              _ispressed = false;
+                            });
+                          }
+                        : null,
                     child: Text("Finish"),
                   ))
               : Container()

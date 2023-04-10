@@ -8,7 +8,7 @@ class ButtonImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 200,
       child: AspectRatio(
         aspectRatio: 208 / 71,

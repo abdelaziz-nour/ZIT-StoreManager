@@ -5,7 +5,7 @@ import 'package:store_manager/myWidgets/productCard.dart';
 import 'package:store_manager/myWidgets/searchBar.dart';
 
 class ItemsList extends StatefulWidget {
-  ItemsList({super.key});
+  const ItemsList({super.key});
 
   @override
   State<ItemsList> createState() => _ItemsListState();
@@ -13,7 +13,23 @@ class ItemsList extends StatefulWidget {
 
 class _ItemsListState extends State<ItemsList> {
   TextEditingController _textEditingController = TextEditingController();
-  Messages _messages = Messages();
+  final Messages _messages = Messages();
+  var data = {
+    {'title': 'kfc', 'subtitle': 'subtitle', 'quantity': 7, 'price': 1200},
+    {
+      'title': 'mcdonalds',
+      'subtitle': 'subtitle 2',
+      'quantity': 12,
+      'price': 2200000000000000000
+    },
+    {
+      'title': 'donalds',
+      'subtitle': 'subtitle 3',
+      'quantity': 23,
+      'price': 42000
+    }
+  };
+  String searchText = '';
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +50,9 @@ class _ItemsListState extends State<ItemsList> {
             IconButton(
                 onPressed: () {
                   _messages.showMyDialog(
-                      context: context, title: 'Deletion', content: 'Do you want to delete this category ?');
+                      context: context,
+                      title: 'Deletion',
+                      content: 'Do you want to delete this category ?');
                 },
                 icon: Icon(
                   Icons.delete,
@@ -42,16 +60,14 @@ class _ItemsListState extends State<ItemsList> {
                 ))
           ],
         ),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SearchInputFb1(
-                  hintText: 'Search', searchController: _textEditingController),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0, left: 20),
-              child: Align(
+        body: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              SearchInputFb1(
+                  hintText: 'Search ...',
+                  onchange: (value) => {setState(() => searchText = value)}),
+              Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                     child: Text(
@@ -65,20 +81,28 @@ class _ItemsListState extends State<ItemsList> {
                       addProductDialog(context: context);
                     }),
               ),
-            ),
-            ProductCard(
-              title: 'title 1',
-              subtitle: 'subtitle 1',
-              quantity: 0,
-              price: 2500,
-            ),
-            ProductCard(
-              title: 'title 2',
-              subtitle: 'subtitle 2',
-              quantity: 0,
-              price: 4200,
-            ),
-          ]),
+              ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: data.isEmpty ? 0 : data.length,
+                  itemBuilder: (context, i) {
+                    if (data
+                        .elementAt(i)['title']
+                        .toString()
+                        .toLowerCase()
+                        .contains((searchText.toLowerCase()))) {
+                      return ProductCard(
+                        title: data.elementAt(i)['title'].toString(),
+                        subtitle: data.elementAt(i)['subtitle'].toString(),
+                        price: int.parse(data.elementAt(i)['price'].toString()),
+                        quantity:
+                            int.parse(data.elementAt(i)['quantity'].toString()),
+                      );
+                    }
+                    return SizedBox();
+                  })
+            ]),
+          ),
         ));
   }
 }

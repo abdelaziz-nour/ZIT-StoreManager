@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:store_manager/pages/productsListPage.dart';
 
-class PromoCard extends StatelessWidget {
-  const PromoCard({Key? key, required this.categoryName}) : super(key: key);
+class CategoryCard extends StatelessWidget {
+  const CategoryCard({Key? key, required this.categoryName}) : super(key: key);
   final String categoryName;
 
   @override

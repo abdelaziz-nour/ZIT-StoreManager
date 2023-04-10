@@ -32,14 +32,13 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Center(
-            child: const Text(
-          'Store Name',
-          style: TextStyle(color: Color(0xff4338CA)),
-        )),
-      ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: const Text(
+            'Store Name',
+            style: TextStyle(color: Color(0xff4338CA)),
+          )),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

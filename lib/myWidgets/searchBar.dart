@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class SearchInputFb1 extends StatelessWidget {
-  final TextEditingController searchController;
   final String hintText;
+  final onchange;
 
-  const SearchInputFb1(
-      {required this.searchController, required this.hintText, Key? key})
+  const SearchInputFb1({required this.hintText, Key? key,  required Function(String val) this.onchange})
       : super(
           key: key,
         );
@@ -22,9 +21,8 @@ class SearchInputFb1 extends StatelessWidget {
             color: Colors.grey.withOpacity(.3)),
       ]),
       child: TextField(
-        controller: searchController,
         textAlign: TextAlign.center,
-        onChanged: (value) {},
+        onChanged: onchange,
         style: const TextStyle(fontSize: 14),
         decoration: InputDecoration(
           // prefixIcon: Icon(Icons.email),
