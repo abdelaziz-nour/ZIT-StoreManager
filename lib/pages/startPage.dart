@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_manager/pages/loginPage.dart';
 
 import '../myWidgets/customButton.dart';
 
@@ -33,8 +34,11 @@ class StartPage extends StatelessWidget {
             ),
             Text(
               'Zoal IT',
-              style:
-                  TextStyle(color: Colors.white, fontSize: screenHeight / 15),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: screenHeight / 15,
+                fontFamily: 'Pacifico',
+              ),
             ),
             SizedBox(
               height: 20,
@@ -46,15 +50,25 @@ class StartPage extends StatelessWidget {
                     height: screenHeight / 15,
                     width: screenWidth / 2.5,
                     child: ButtonImage(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return LoginPage();
+                        }));
+                      },
                       text: 'عربي',
                     )),
                 SizedBox(
                     height: screenHeight / 15,
                     width: screenWidth / 2.5,
                     child: ButtonImage(
-                      onPressed: () {},
-                      text: 'ُEnglish',
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return LoginPage();
+                        }));
+                      },
+                      text: 'English',
                     )),
               ],
             )

@@ -11,13 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    final loginformKey = GlobalKey<FormState>();
-    final passwordController = TextEditingController();
-    final usernameController = TextEditingController();
     TabController _controller = TabController(length: 2, vsync: this);
-    final addLoginformKey = GlobalKey<FormState>();
-    final addPasswordController = TextEditingController();
-    final addUsernameController = TextEditingController();
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
@@ -42,41 +36,33 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     Tab(
                       icon: Icon(
                         Icons.storefront_sharp,
-                        color: Colors.blue,
+                        color: Color(0xff4338CA),
                       ),
                       child: Text(
                         'Store',
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: Color(0xff4338CA)),
                       ),
                     ),
                     Tab(
                       icon: Icon(
                         Icons.insert_chart_outlined,
-                        color: Colors.blue,
+                        color: Color(0xff4338CA),
                       ),
                       child: Text(
                         'Addvertiser',
-                        style: TextStyle(color: Colors.blue),
+                        style: TextStyle(color: Color(0xff4338CA)),
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: TabBarView(
                   controller: _controller,
                   children: <Widget>[
-                    LoginForm(
-                        formKey: loginformKey,
-                        usernameController: usernameController,
-                        passwordController: passwordController,
-                        context: context),
-                    LoginForm(
-                        formKey: addLoginformKey,
-                        usernameController: addUsernameController,
-                        passwordController: addPasswordController,
-                        context: context),
+                    LoginForm(),
+                    LoginForm(),
                   ],
                 ),
               ),

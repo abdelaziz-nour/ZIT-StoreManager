@@ -37,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
         title: Center(
             child: const Text(
           'Store Name',
-          style: TextStyle(color: Colors.blue),
+          style: TextStyle(color: Color(0xff4338CA)),
         )),
       ),
       body: Center(
@@ -55,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Color(0xff4338CA),
         onTap: _onItemTapped,
       ),
     );
