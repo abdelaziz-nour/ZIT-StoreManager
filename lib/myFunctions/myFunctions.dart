@@ -14,12 +14,11 @@ class MyFunctions {
 
     // convert the picked image to Multipart file to upload using http
     var mFile = MultipartFile.fromBytes(
-      "payment_Notification",
+      "Image",
       File(file?.path ?? "").readAsBytesSync(),
-      filename: "Notification Image",
+      filename: 'CategoryImage.png'
     );
     print(mFile.toString());
+    return mFile;
   }
-
-  
 }

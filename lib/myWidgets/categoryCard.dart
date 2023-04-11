@@ -1,18 +1,28 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:store_manager/pages/productsListPage.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({Key? key, required this.categoryName}) : super(key: key);
+  const CategoryCard({
+    Key? key,
+    required this.categoryName,
+    required this.image,
+    required this.dategoryId,
+  }) : super(key: key);
   final String categoryName;
+  final String image;
+  final int dategoryId;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ItemsList();
+          return ItemsList(
+            categoryID: dategoryId,
+          );
         }));
       },
       child: Container(
@@ -24,9 +34,15 @@ class CategoryCard extends StatelessWidget {
         child: Stack(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset('assets/zit.jpg', fit: BoxFit.fill),
-            ),
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(
+                  'http://vzzoz.pythonanywhere.com$image',
+                  height: 10000,
+                  width: 10000,
+                  fit: BoxFit.fill,
+                )
+                // child: Image.asset('assets/zit.jpg', fit: BoxFit.fill),
+                ),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: BackdropFilter(
@@ -35,12 +51,21 @@ class CategoryCard extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: Padding(
                     padding: EdgeInsets.all(25.0),
-                    child: Text(
-                      categoryName,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
+                    child: Center(
+                      child: Text(
+                        categoryName,
+                        style: TextStyle(
+                            color: Colors.white,
+                            shadows: const <Shadow>[
+                              Shadow(
+                                offset: Offset(5.0, 5.0),
+                                blurRadius: 3.0,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ],
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),

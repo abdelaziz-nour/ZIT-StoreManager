@@ -62,6 +62,7 @@ class _LoginFormState extends State<LoginForm> {
                           Container(
                             padding: EdgeInsets.all(8.0),
                             child: TextFormField(
+                              obscureText: true,
                               controller: passwordController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -87,13 +88,17 @@ class _LoginFormState extends State<LoginForm> {
                     GestureDetector(
                       onTap: () async {
                         if (formKey.currentState!.validate()) {
+                          await _databaseHelper.loginData(
+                              usernameController.text.trim(),
+                              passwordController.text);
+                        }
+                        if (_databaseHelper.success == true) {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
                             return Dashboard();
                           }));
-                          // await _databaseHelper.loginData(
-                          //     usernameController.text.trim(),
-                          //     passwordController.text);
+                        } else {
+                          print(_databaseHelper.success);
                         }
                       },
                       child: Container(

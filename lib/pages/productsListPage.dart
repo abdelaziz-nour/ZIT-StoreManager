@@ -5,14 +5,13 @@ import 'package:store_manager/myWidgets/productCard.dart';
 import 'package:store_manager/myWidgets/searchBar.dart';
 
 class ItemsList extends StatefulWidget {
-  const ItemsList({super.key});
-
+  const ItemsList({super.key, required this.categoryID});
+  final int categoryID;
   @override
   State<ItemsList> createState() => _ItemsListState();
 }
 
 class _ItemsListState extends State<ItemsList> {
-  TextEditingController _textEditingController = TextEditingController();
   final Messages _messages = Messages();
   var data = {
     {'title': 'kfc', 'subtitle': 'subtitle', 'quantity': 7, 'price': 1200},
@@ -30,6 +29,7 @@ class _ItemsListState extends State<ItemsList> {
     }
   };
   String searchText = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -81,26 +81,27 @@ class _ItemsListState extends State<ItemsList> {
                       addProductDialog(context: context);
                     }),
               ),
-              ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: data.isEmpty ? 0 : data.length,
-                  itemBuilder: (context, i) {
-                    if (data
-                        .elementAt(i)['title']
-                        .toString()
-                        .toLowerCase()
-                        .contains((searchText.toLowerCase()))) {
-                      return ProductCard(
-                        title: data.elementAt(i)['title'].toString(),
-                        subtitle: data.elementAt(i)['subtitle'].toString(),
-                        price: int.parse(data.elementAt(i)['price'].toString()),
-                        quantity:
-                            int.parse(data.elementAt(i)['quantity'].toString()),
-                      );
-                    }
-                    return SizedBox();
-                  })
+              
+              // ListView.builder(
+              //     primary: false,
+              //     shrinkWrap: true,
+              //     itemCount: data.isEmpty ? 0 : data.length,
+              //     itemBuilder: (context, i) {
+              //       if (data
+              //           .elementAt(i)['title']
+              //           .toString()
+              //           .toLowerCase()
+              //           .contains((searchText.toLowerCase()))) {
+              //         return ProductCard(
+              //           title: data.elementAt(i)['title'].toString(),
+              //           subtitle: data.elementAt(i)['subtitle'].toString(),
+              //           price: int.parse(data.elementAt(i)['price'].toString()),
+              //           quantity:
+              //               int.parse(data.elementAt(i)['quantity'].toString()),
+              //         );
+              //       }
+              //       return SizedBox();
+              //     })
             ]),
           ),
         ));
