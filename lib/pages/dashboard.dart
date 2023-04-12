@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:store_manager/pages/categoriesPage.dart';
 
+import 'ordersPage.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -14,12 +16,9 @@ class _DashboardState extends State<Dashboard> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     Categories(),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    Orders(),
   ];
 
   void _onItemTapped(int index) {

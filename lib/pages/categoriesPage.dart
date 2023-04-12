@@ -98,6 +98,8 @@ class _CategoriesState extends State<Categories> {
                                           child: Column(
                                             children: [
                                               TextFormField(
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                                 textAlign: TextAlign.center,
                                                 controller:
                                                     categoryNameController,
@@ -138,7 +140,7 @@ class _CategoriesState extends State<Categories> {
                                                           BorderRadius.circular(
                                                               15.0),
                                                     ))),
-                                                onPressed: () async {
+                                                onPressed: () {
                                                   setState(() async {
                                                     imageFile =
                                                         await myFunctions

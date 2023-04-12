@@ -16,7 +16,7 @@ class MyFunctions {
     var mFile = MultipartFile.fromBytes(
       "Image",
       File(file?.path ?? "").readAsBytesSync(),
-      filename: 'CategoryImage.png'
+      filename: 'Image.png'
     );
     print(mFile.toString());
     return mFile;

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:store_manager/api/apiRequests.dart';
 
 import '../myAnimations/fadeAnimation.dart';
 
 class ProductCard extends StatefulWidget {
+  final int id;
   final String title;
   final String subtitle;
   final int quantity;
   final int price;
+  final image;
 
   const ProductCard({
     required this.title,
@@ -16,25 +19,37 @@ class ProductCard extends StatefulWidget {
     required this.price,
     required this.quantity,
     Key? key,
+    required this.image,
+    required this.id,
   }) : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
   State<ProductCard> createState() => ProductCardState(
-      title: title, subtitle: subtitle, price: price, quantity: quantity);
+        id: id,
+        title: title,
+        subtitle: subtitle,
+        price: price,
+        quantity: quantity,
+        image: image,
+      );
 }
 
 class ProductCardState extends State<ProductCard> {
+  final int id;
   final String title;
   final String subtitle;
   int quantity;
   final int price;
+  final image;
 
   ProductCardState({
+    required this.id,
     required this.title,
     required this.subtitle,
     required this.price,
     required this.quantity,
+    required this.image,
     Key? key,
   });
 
@@ -74,7 +89,7 @@ class ProductCardState extends State<ProductCard> {
 
   final dishImage =
       "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/malika%2FRectangle%2013.png?alt=media&token=6a5f056c-417c-48d3-b737-f448e4f13321";
-
+  DatabaseHelper _databaseHelper = DatabaseHelper();
   @override
   Widget build(BuildContext context) {
     return FadeAnimation(
@@ -89,8 +104,8 @@ class ProductCardState extends State<ProductCard> {
                 caption: 'Delete',
                 color: Colors.red,
                 icon: Icons.delete,
-                onTap: () {
-                  print('4');
+                onTap: () async {
+                  await _databaseHelper.deleteProduct(productID: id.toString());
                 },
               ),
             ],
@@ -108,9 +123,14 @@ class ProductCardState extends State<ProductCard> {
                       });
                     },
                     leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Image.network(
-                          dishImage,
+                        borderRadius: BorderRadius.circular(500),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 5,
+                          height: MediaQuery.of(context).size.height,
+                          child: Image.network(
+                            'http://vzzoz.pythonanywhere.com$image',
+                            fit: BoxFit.fill,
+                          ),
                         )),
                     title: Text(title),
                     subtitle: Text('$subtitle\n$quantity'),
@@ -170,10 +190,11 @@ class ProductCardState extends State<ProductCard> {
                   alignment: AlignmentDirectional.bottomCenter,
                   child: TextButton(
                     onPressed: _isEnabled
-                        ? () {
+                        ? () async {
+                            await _databaseHelper.addProductQuantity(
+                                productID: id.toString(),
+                                quantity: quantityController.text);
                             setState(() {
-                              quantity = int.parse(quantityController.text);
-                              buttonState(false);
                               _ispressed = false;
                             });
                           }
