@@ -34,7 +34,7 @@ class DatabaseHelper {
     prefs.setString(key, value);
   }
 
-  loginData(String username, String password) async {
+  loginData({required String username,required String password}) async {
     Uri myUrl = Uri.parse('http://vzzoz.pythonanywhere.com//login');
     final response = await http
         .post(myUrl, body: {"username": username, "password": password});
@@ -58,6 +58,7 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'}, body: {"Store": "1"});
     var data = json.decode(response.body);
+    success = data['success'];
     print(data['data']);
     return data['data'];
   }
@@ -92,8 +93,8 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Category": categoryID.toString()});
-    print(response.statusCode);
     var data = json.decode(response.body);
+    success = data['success'];
     print(data);
     return data['data'];
   }
@@ -136,7 +137,6 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Category": categoryID});
-    print(response.statusCode);
     print(response.body);
   }
 
@@ -149,7 +149,6 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Product": productID});
-    print(response.statusCode);
     print(response.body);
   }
 
@@ -163,7 +162,8 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Product": productID, "Quantity": quantity});
-    print(response.statusCode);
+    var data = json.decode(response.body);
+    success = data['success'];
     print(response.body);
   }
 
@@ -176,11 +176,8 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'}, body: {"Store": "1"});
     var data = json.decode(response.body);
+    success = data['success'];
     print(data['data']);
     return data['data'];
   }
-
-
-
-
 }

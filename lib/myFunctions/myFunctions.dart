@@ -18,7 +18,6 @@ class MyFunctions {
       File(file?.path ?? "").readAsBytesSync(),
       filename: 'Image.png'
     );
-    print(mFile.toString());
     return mFile;
   }
 }

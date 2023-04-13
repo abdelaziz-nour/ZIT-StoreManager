@@ -67,6 +67,7 @@ flutter:
   assets:
     - assets/zit.jpg
     - assets/button1.png
+    - assets/FlutterBricksLogo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

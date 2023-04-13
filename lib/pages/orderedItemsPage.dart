@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:store_manager/globals.dart';
+import 'package:store_manager/globals.dart';
 
 class OrderedItems extends StatelessWidget {
   const OrderedItems({required this.orderedItems});
@@ -8,16 +8,17 @@ class OrderedItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Global global = Global();
     int? total = 0;
     for (var item in orderedItems) {
-      total = (total! + int.parse(item['Price']) * item['Quantity']) as int?;
+      total = (total! + item['Subtotal']) as int?;
     }
     Map map = orderedItems.asMap();
     print(orderedItems);
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: global.accent,
           elevation: 0,
           leading: BackButton(
             color: Colors.black,
@@ -25,87 +26,100 @@ class OrderedItems extends StatelessWidget {
           ),
           title: Text(
             'Store Name',
-            style: TextStyle(color: Color(0xff4338CA)),
+            style: TextStyle(color: global.primary),
           )),
-      body: SingleChildScrollView(
-          child: Column(
+      body: ListView(
         children: [
-          ListView.builder(
-              shrinkWrap: true,
-              primary: false,
-              itemCount: orderedItems == null ? 0 : 1,
-              itemBuilder: (context, index) {
-                return Center(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: DataTable(
-                        columns: [
-                          DataColumn(
-                            label: Text(
-                              'No',
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xff4338CA)),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Product',
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xff4338CA)),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Quantity',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Color(0xff4338CA),
-                              ),
-                            ),
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'price',
-                              style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xff4338CA)),
-                            ),
-                          ),
-                        ],
-                        rows: map.entries
-                            .map(
-                              (entry) => DataRow(
-                                cells: [
-                                  DataCell(Text((entry.key + 1).toString())),
-                                  DataCell(Text(entry.value['ProductName'])),
-                                  DataCell(Text(
-                                      (entry.value['Quantity']).toString())),
-                                  DataCell(
-                                      Text((entry.value['Price']).toString())),
-                                ],
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-          Center(
-            child: Text(
-              'Total items are : ${orderedItems.length}\nOrder price : $total SDG',
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Color(0xff4338CA),
-              ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total',
+                  style: TextStyle(color: Colors.black, fontSize: 20),
+                ),
+                Text(
+                  '$total SDG',
+                  style: TextStyle(color: global.primary, fontSize: 20),
+                ),
+              ],
             ),
-          )
+          ),
+          Column(
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          'No',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: global.primary),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Product',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: global.primary),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Quantity',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: global.primary,
+                          ),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Price',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: global.primary),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Subtotal',
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: global.primary),
+                        ),
+                      ),
+                    ],
+                    rows: map.entries
+                        .map(
+                          (entry) => DataRow(
+                            cells: [
+                              DataCell(Text(
+                                (entry.key + 1).toString(),
+                              )),
+                              DataCell(Text(entry.value['ProductName'])),
+                              DataCell(Center(
+                                  child: Text(
+                                      (entry.value['Quantity']).toString()))),
+                              DataCell(Text((entry.value['Price']).toString())),
+                              DataCell(
+                                  Text((entry.value['Subtotal']).toString())),
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              )
+            ],
+          ),
         ],
-      )),
+      ),
     );
   }
 }

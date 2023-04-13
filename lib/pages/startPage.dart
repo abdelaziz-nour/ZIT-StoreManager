@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_manager/pages/loginPage.dart';
-
+import 'package:store_manager/globals.dart';
 import '../myWidgets/customButton.dart';
 
 class StartPage extends StatelessWidget {
@@ -8,10 +8,9 @@ class StartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    final primaryColor = Color(0xff4338CA);
+    Global global = Global();
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 228, 227, 232),
       body: Column(
         children: [
           ClipRRect(
@@ -28,8 +27,8 @@ class StartPage extends StatelessWidget {
           Text(
             'Zoal IT',
             style: TextStyle(
-              color: primaryColor,
-              fontSize: screenHeight / 15,
+              color: global.primary,
+              fontSize: global.screenwheight(context) / 15,
               fontFamily: 'Pacifico',
             ),
           ),
@@ -40,8 +39,8 @@ class StartPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
-                  height: screenHeight / 15,
-                  width: screenWidth / 2.5,
+                  height: global.screenwheight(context) / 15,
+                  width: global.screenwidth(context) / 2.5,
                   child: ButtonImage(
                     onPressed: () {
                       Navigator.push(context,
@@ -52,8 +51,8 @@ class StartPage extends StatelessWidget {
                     text: 'عربي',
                   )),
               SizedBox(
-                  height: screenHeight / 15,
-                  width: screenWidth / 2.5,
+                  height: global.screenwheight(context) / 15,
+                  width: global.screenwidth(context) / 2.5,
                   child: ButtonImage(
                     onPressed: () {
                       Navigator.push(context,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:store_manager/pages/categoriesPage.dart';
-
+import 'package:store_manager/pages/loginPage.dart';
 import 'ordersPage.dart';
+import 'package:store_manager/globals.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -13,6 +12,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  Global global = Global();
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -31,13 +31,22 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          title: const Text(
-            'Store Name',
-            style: TextStyle(color: Color(0xff4338CA)),
-          )),
+        centerTitle: true,
+        backgroundColor: global.accent,
+        elevation: 0,
+        title: Text('Store Name',
+            style: TextStyle(color: Color.fromARGB(255, 76, 154, 203))),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return LoginPage();
+              }));
+            },
+            icon: Icon(
+              Icons.logout_sharp,
+              color: global.primary,
+            )),
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -53,7 +62,7 @@ class _DashboardState extends State<Dashboard> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff4338CA),
+        selectedItemColor: Color.fromARGB(255, 76, 154, 203),
         onTap: _onItemTapped,
       ),
     );
