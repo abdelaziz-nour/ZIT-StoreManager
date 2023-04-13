@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:store_manager/api/apiRequests.dart';
-
+import 'package:store_manager/globals.dart';
 import '../myAnimations/fadeAnimation.dart';
 
 class ProductCard extends StatefulWidget {
@@ -12,6 +11,7 @@ class ProductCard extends StatefulWidget {
   final int quantity;
   final int price;
   final image;
+  final int lang;
 
   const ProductCard({
     required this.title,
@@ -21,6 +21,7 @@ class ProductCard extends StatefulWidget {
     Key? key,
     required this.image,
     required this.id,
+    required this.lang,
   }) : super(key: key);
 
   @override
@@ -32,6 +33,7 @@ class ProductCard extends StatefulWidget {
         price: price,
         quantity: quantity,
         image: image,
+        lang: lang,
       );
 }
 
@@ -42,8 +44,10 @@ class ProductCardState extends State<ProductCard> {
   int quantity;
   final int price;
   final image;
+  final int lang;
 
   ProductCardState({
+    required this.lang,
     required this.id,
     required this.title,
     required this.subtitle,
@@ -57,7 +61,6 @@ class ProductCardState extends State<ProductCard> {
   @override
   void initState() {
     quantityController.text = quantity.toString();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -86,10 +89,7 @@ class ProductCardState extends State<ProductCard> {
       buttonState(true);
     }
   }
-
-  final dishImage =
-      "https://firebasestorage.googleapis.com/v0/b/flutterbricks-public.appspot.com/o/malika%2FRectangle%2013.png?alt=media&token=6a5f056c-417c-48d3-b737-f448e4f13321";
-  DatabaseHelper _databaseHelper = DatabaseHelper();
+  Global global = Global();
   @override
   Widget build(BuildContext context) {
     return FadeAnimation(
@@ -101,11 +101,11 @@ class ProductCardState extends State<ProductCard> {
             actionExtentRatio: 0.25,
             secondaryActions: <Widget>[
               IconSlideAction(
-                caption: 'Delete',
+                caption: lang == 1 ? 'Delete' : "حذف",
                 color: Colors.red,
                 icon: Icons.delete,
                 onTap: () async {
-                  await _databaseHelper.deleteProduct(productID: id.toString());
+                  await global.databaseHelper.deleteProduct(productID: id.toString());
                 },
               ),
             ],
@@ -141,7 +141,7 @@ class ProductCardState extends State<ProductCard> {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('Quantity'),
+                            Text(lang == 1 ? 'Quantity' : "الكمية"),
                             Row(
                               children: [
                                 TextButton(
@@ -191,7 +191,7 @@ class ProductCardState extends State<ProductCard> {
                   child: TextButton(
                     onPressed: _isEnabled
                         ? () async {
-                            await _databaseHelper.addProductQuantity(
+                            await global.databaseHelper.addProductQuantity(
                                 productID: id.toString(),
                                 quantity: quantityController.text);
                             setState(() {
@@ -199,7 +199,7 @@ class ProductCardState extends State<ProductCard> {
                             });
                           }
                         : null,
-                    child: Text("Finish"),
+                    child: Text(lang == 1 ? "Finish" : "إنهاء"),
                   ))
               : Container()
         ],

@@ -3,7 +3,8 @@ import 'package:store_manager/globals.dart';
 import 'package:store_manager/globals.dart';
 
 class OrderedItems extends StatelessWidget {
-  const OrderedItems({required this.orderedItems});
+  const OrderedItems({required this.orderedItems, required this.lang});
+  final int lang;
   final orderedItems;
 
   @override
@@ -32,19 +33,33 @@ class OrderedItems extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total',
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
-                Text(
-                  '$total SDG',
-                  style: TextStyle(color: global.primary, fontSize: 20),
-                ),
-              ],
-            ),
+            child: lang == 1
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
+                      Text(
+                        '$total SDG',
+                        style: TextStyle(color: global.primary, fontSize: 20),
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$total SDG',
+                        style: TextStyle(color: global.primary, fontSize: 20),
+                      ),
+                      Text(
+                        'المبلغ',
+                        style: TextStyle(color: Colors.black, fontSize: 20),
+                      ),
+                    ],
+                  ),
           ),
           Column(
             children: [
@@ -55,7 +70,7 @@ class OrderedItems extends StatelessWidget {
                     columns: [
                       DataColumn(
                         label: Text(
-                          'No',
+                          lang == 1 ? 'No' : "رقم",
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: global.primary),
@@ -63,7 +78,7 @@ class OrderedItems extends StatelessWidget {
                       ),
                       DataColumn(
                         label: Text(
-                          'Product',
+                          lang == 1 ? 'Product' : "المنتج",
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: global.primary),
@@ -71,7 +86,7 @@ class OrderedItems extends StatelessWidget {
                       ),
                       DataColumn(
                         label: Text(
-                          'Quantity',
+                          lang == 1 ? 'Quantity' : "الكمية",
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             color: global.primary,
@@ -80,7 +95,7 @@ class OrderedItems extends StatelessWidget {
                       ),
                       DataColumn(
                         label: Text(
-                          'Price',
+                          lang == 1 ? 'Price' : "السعر",
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: global.primary),
@@ -88,7 +103,7 @@ class OrderedItems extends StatelessWidget {
                       ),
                       DataColumn(
                         label: Text(
-                          'Subtotal',
+                          lang == 1 ? 'Subtotal' : "المجموع",
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
                               color: global.primary),

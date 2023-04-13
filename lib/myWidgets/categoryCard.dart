@@ -19,7 +19,7 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ItemsList(
+          return ItemsList(lang: 0,
             categoryID: dategoryId,
           );
         }));
@@ -40,7 +40,6 @@ class CategoryCard extends StatelessWidget {
                   width: 10000,
                   fit: BoxFit.fill,
                 )
-                // child: Image.asset('assets/zit.jpg', fit: BoxFit.fill),
                 ),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),

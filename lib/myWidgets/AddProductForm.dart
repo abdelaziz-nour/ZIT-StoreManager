@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:store_manager/api/apiRequests.dart';
 import 'package:store_manager/myFunctions/myFunctions.dart';
+import 'package:store_manager/globals.dart';
 
-addProductDialog({
-  required context,
-  required int categoryID,
-}) {
-  final DatabaseHelper _databaseHelper = DatabaseHelper();
+addProductDialog(
+    {required context, required int categoryID, required int lang}) {
   final primaryColor = Color(0xff4338CA);
   final secondaryColor = Color(0xff6D28D9);
   final accentColor = Color(0xffffffff);
@@ -17,6 +14,7 @@ addProductDialog({
   final productPriceController = TextEditingController();
   final productQuantityController = TextEditingController();
   MyFunctions myFunctions = MyFunctions();
+  Global global = Global();
   var imageFile;
   showDialog(
     context: context,
@@ -52,7 +50,7 @@ addProductDialog({
                     const SizedBox(
                       height: 15,
                     ),
-                    Text("Add New Product",
+                    Text(lang == 1 ? "Add New Product" : "اضافة منتج جديد",
                         style: TextStyle(
                             color: accentColor,
                             fontSize: 18,
@@ -71,9 +69,18 @@ addProductDialog({
                               textAlign: TextAlign.center,
                               controller: productNameController,
                               decoration: InputDecoration(
-                                  hintText: "Product Name",
+                                  hintText:
+                                      lang == 1 ? "Product Name" : "اسم المنتج",
                                   hintStyle:
                                       TextStyle(color: Colors.grey[400])),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return lang == 1
+                                      ? 'Product Name field is required'
+                                      : "حقل اسم المنتج مطلوب";
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(
                               height: 20,
@@ -83,9 +90,17 @@ addProductDialog({
                               textAlign: TextAlign.center,
                               controller: productSubtitleController,
                               decoration: InputDecoration(
-                                  hintText: "Subtitle",
+                                  hintText: lang == 1 ? "Description" : "الوصف",
                                   hintStyle:
                                       TextStyle(color: Colors.grey[400])),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return lang == 1
+                                      ? ' Description field is required'
+                                      : "حقل الوصف مطلوب";
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(
                               height: 20,
@@ -99,9 +114,17 @@ addProductDialog({
                               textAlign: TextAlign.center,
                               controller: productPriceController,
                               decoration: InputDecoration(
-                                  hintText: "Price",
+                                  hintText: lang == 1 ? "Price" : "السعر",
                                   hintStyle:
                                       TextStyle(color: Colors.grey[400])),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return lang == 1
+                                      ? ' Price field is required'
+                                      : "حقل السعر مطلوب";
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(
                               height: 20,
@@ -115,9 +138,17 @@ addProductDialog({
                               textAlign: TextAlign.center,
                               controller: productQuantityController,
                               decoration: InputDecoration(
-                                  hintText: "Quantity",
+                                  hintText: lang == 1 ? "Quantity" : "الكمية",
                                   hintStyle:
                                       TextStyle(color: Colors.grey[400])),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return lang == 1
+                                      ? ' Quantity field is required'
+                                      : "حقل الكمية مطلوب";
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(
                               height: 20,
@@ -144,7 +175,7 @@ addProductDialog({
                                 imageFile = await myFunctions.getFromGallery();
                               },
                               child: Text(
-                                'Add Image',
+                                lang == 1 ? 'Add Image' : "اضافة صورة",
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 16),
                               ),
@@ -171,19 +202,27 @@ addProductDialog({
                                     borderRadius: BorderRadius.circular(15.0),
                                   ))),
                               onPressed: () async {
-                                await _databaseHelper.addProduct(
-                                    name: productNameController.text,
-                                    decription: productSubtitleController.text,
-                                    price:
-                                        int.parse(productPriceController.text),
-                                    quantity: int.parse(
-                                        productQuantityController.text),
-                                    categoryID: categoryID,
-                                    image: imageFile);
-                                Navigator.pop(context);
+                                try {
+                                  if (formKey.currentState!.validate()) {
+                                    await global.databaseHelper.addProduct(
+                                        name: productNameController.text,
+                                        decription:
+                                            productSubtitleController.text,
+                                        price: int.parse(
+                                            productPriceController.text),
+                                        quantity: int.parse(
+                                            productQuantityController.text),
+                                        categoryID: categoryID,
+                                        image: imageFile);
+                                    Navigator.pop(context);
+                                  }
+                                } catch (e) {
+                                  return myFunctions.noImageField(
+                                      context, lang);
+                                }
                               },
                               child: Text(
-                                'Finish',
+                                lang == 1 ? 'Finish' : "إنهاء",
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 16),
                               ),

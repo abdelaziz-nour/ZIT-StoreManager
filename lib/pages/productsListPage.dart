@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:store_manager/api/apiRequests.dart';
 import 'package:store_manager/myWidgets/messages.dart';
 import 'package:store_manager/myWidgets/productCard.dart';
 import 'package:store_manager/myWidgets/searchBar.dart';
@@ -7,19 +6,21 @@ import 'package:store_manager/globals.dart';
 import '../myWidgets/AddProductForm.dart';
 
 class ItemsList extends StatefulWidget {
-  const ItemsList({super.key, required this.categoryID});
+  const ItemsList({super.key, required this.categoryID, required this.lang});
+  final int lang;
   final int categoryID;
   @override
-  State<ItemsList> createState() => _ItemsListState(categoryID);
+  State<ItemsList> createState() => _ItemsListState(categoryID, lang: lang);
 }
 
 class _ItemsListState extends State<ItemsList> {
   Global global = Global();
+  final int lang;
   final categoryID;
-  _ItemsListState(this.categoryID);
+  _ItemsListState(this.categoryID, {required this.lang});
   @override
   Widget build(BuildContext context) {
-    final Messages _messages = Messages(categoryID: categoryID);
+    final Messages _messages = Messages(categoryID: categoryID, lang: lang);
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 237, 233, 243),
         appBar: AppBar(
@@ -39,8 +40,10 @@ class _ItemsListState extends State<ItemsList> {
                 onPressed: () {
                   _messages.showMyDialog(
                       context: context,
-                      title: 'Deletion',
-                      content: 'Do you want to delete this category ?');
+                      title: lang == 1 ? 'Deletion' : "حذف",
+                      content: lang == 1
+                          ? 'Do you want to delete this category ?'
+                          : "هل تريد حذف هذه الفئة");
                 },
                 icon: Icon(
                   Icons.delete,
@@ -53,14 +56,15 @@ class _ItemsListState extends State<ItemsList> {
           child: SingleChildScrollView(
             child: Column(children: [
               SearchInputFb1(
-                  hintText: 'Search ...',
+                  hintText: lang == 1 ? 'Search ...' : "البحث...",
                   onchange: (value) =>
                       {setState(() => global.searchText = value)}),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment:
+                    lang == 1 ? Alignment.centerLeft : Alignment.centerRight,
                 child: TextButton(
                     child: Text(
-                      "Add Product",
+                      lang == 1 ? "Add Product" : "اضافة منتج",
                       style: TextStyle(
                           color: global.primary,
                           fontWeight: FontWeight.bold,
@@ -68,7 +72,7 @@ class _ItemsListState extends State<ItemsList> {
                     ),
                     onPressed: () {
                       addProductDialog(
-                          context: context, categoryID: categoryID);
+                          context: context, categoryID: categoryID, lang: lang);
                     }),
               ),
               FutureBuilder(
@@ -90,6 +94,7 @@ class _ItemsListState extends State<ItemsList> {
                               price: int.parse(snapshot.data![i]['Price']),
                               quantity: snapshot.data![i]['Quantity'],
                               image: snapshot.data![i]['Image'],
+                              lang: lang,
                             );
                           })
                       : Center(

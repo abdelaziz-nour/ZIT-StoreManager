@@ -1,15 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:store_manager/api/apiRequests.dart';
-import 'package:store_manager/myFunctions/myFunctions.dart';
+import 'dart:typed_data';
 
-addCategory({required context}) {
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:store_manager/myFunctions/myFunctions.dart';
+import 'package:store_manager/globals.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'dart:io';
+
+addCategory({required context, required lang}) {
   final primaryColor = Color(0xff4338CA);
   final secondaryColor = Color(0xff6D28D9);
   final accentColor = Color(0xffffffff);
   final formKey = GlobalKey<FormState>();
   final categoryNameController = TextEditingController();
   MyFunctions myFunctions = MyFunctions();
-  DatabaseHelper _databaseHelper = DatabaseHelper();
+  Global global = Global();
   var imageFile;
 
   showDialog(
@@ -34,14 +40,13 @@ addCategory({required context}) {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundColor: accentColor.withOpacity(.05),
-                  radius: 25,
-                  child: Image.asset('assets/FlutterBricksLogo.png')
-                ),
+                    backgroundColor: accentColor.withOpacity(.05),
+                    radius: 25,
+                    child: Image.asset('assets/FlutterBricksLogo.png')),
                 const SizedBox(
                   height: 15,
                 ),
-                Text("Add New Category",
+                Text(lang == 1 ? "Add New Category" : "اضافة فئة جديدة",
                     style: TextStyle(
                         color: accentColor,
                         fontSize: 18,
@@ -60,8 +65,18 @@ addCategory({required context}) {
                           textAlign: TextAlign.center,
                           controller: categoryNameController,
                           decoration: InputDecoration(
-                              hintText: "Category Name",
-                              hintStyle: TextStyle(color: Colors.grey[400])),
+                              errorStyle: TextStyle(fontSize: 20),
+                              hintText:
+                                  lang == 1 ? "Category Name" : "إسم الفئة",
+                              hintStyle: TextStyle(color: Colors.grey[400],)),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return lang == 1
+                                  ? 'Categpry name field is required'
+                                  : "حقل اسم الفئة مطلوب";
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: 20,
@@ -88,7 +103,7 @@ addCategory({required context}) {
                             imageFile = await myFunctions.getFromGallery();
                           },
                           child: Text(
-                            'Add Image',
+                            lang == 1 ? 'Add Image' : "اضافة صورة",
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 16),
                           ),
@@ -115,14 +130,32 @@ addCategory({required context}) {
                                 borderRadius: BorderRadius.circular(15.0),
                               ))),
                           onPressed: () async {
-                            await _databaseHelper.addCategory(
-                                image:
-                                    imageFile ?? Image.asset('assets/zit.jpg'),
-                                categoryName: categoryNameController.text);
-                            Navigator.pop(context);
+                            if (formKey.currentState!.validate()) {
+                              if (imageFile == null) {
+                                final imageBytes =
+                                    await rootBundle.load('assets/zit.jpg');
+                                final imageData =
+                                    imageBytes.buffer.asUint8List();
+                                final multipartFile =
+                                    http.MultipartFile.fromBytes(
+                                  'Image',
+                                  imageData,
+                                  filename: 'zit.jpg',
+                                  contentType: MediaType('image', 'png'),
+                                );
+                                await global.databaseHelper.addCategory(
+                                    image: multipartFile,
+                                    categoryName: categoryNameController.text);
+                              } else {
+                                await global.databaseHelper.addCategory(
+                                    image: imageFile,
+                                    categoryName: categoryNameController.text);
+                              }
+                              Navigator.pop(context);
+                            }
                           },
                           child: Text(
-                            'Finish',
+                            lang == 1 ? 'Finish' : "إنهاء",
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 16),
                           ),

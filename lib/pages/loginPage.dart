@@ -3,13 +3,16 @@ import '../myWidgets/loginForm.dart';
 import 'package:store_manager/globals.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key, required this.lang});
+  final int lang;
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState(lang: lang);
 }
 
 class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  _LoginPageState({required this.lang});
+  final int lang;
   @override
   Widget build(BuildContext context) {
     TabController _controller = TabController(length: 2, vsync: this);
@@ -40,7 +43,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           color: global.primary,
                         ),
                         child: Text(
-                          'Store',
+                          lang == 1 ? 'Store' : 'المتجر',
                           style: TextStyle(color: global.primary),
                         ),
                       ),
@@ -50,7 +53,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                           color: global.primary,
                         ),
                         child: Text(
-                          'Addvertiser',
+                          lang == 1 ? 'Addvertiser' : 'المعلن',
                           style: TextStyle(color: global.primary),
                         ),
                       ),
@@ -61,7 +64,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     child: TabBarView(
                       controller: _controller,
                       children: <Widget>[
-                        LoginForm(),
+                        LoginForm(lang:lang),
                         Text(
                           'Comming Soon',
                           style: TextStyle(

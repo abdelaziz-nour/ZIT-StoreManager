@@ -3,6 +3,8 @@ import 'package:store_manager/pages/orderedItemsPage.dart';
 import 'package:store_manager/globals.dart';
 
 class Orders extends StatelessWidget {
+  Orders({required this.lang});
+  final int lang;
   @override
   Widget build(BuildContext context) {
     Global global = Global();
@@ -11,18 +13,33 @@ class Orders extends StatelessWidget {
         body: ListView(shrinkWrap: true, children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Row(
-              children: [
-                Text(
-                  'O',
-                  style: TextStyle(color: global.primary, fontSize: 30),
-                ),
-                Text(
-                  'rders',
-                  style: TextStyle(color: Colors.black, fontSize: 30),
-                ),
-              ],
-            ),
+            child: lang == 1
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'O',
+                        style: TextStyle(color: global.primary, fontSize: 30),
+                      ),
+                      Text(
+                        'rders',
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'لبات',
+                        style: TextStyle(color: Colors.black, fontSize: 30),
+                      ),
+                      Text(
+                        'الطـ',
+                        style: TextStyle(color: global.primary, fontSize: 30),
+                      ),
+                    ],
+                  ),
           ),
           FutureBuilder<dynamic>(
             future: global.databaseHelper.getMyorders(),
@@ -39,6 +56,7 @@ class Orders extends StatelessWidget {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return OrderedItems(
+                                      lang: lang,
                                       orderedItems: snapshot.data[index]
                                           ['OrderItems']);
                                 }));

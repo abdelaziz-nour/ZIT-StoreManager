@@ -45,7 +45,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return LoginPage();
+                        return LoginPage(lang: 0,);
                       }));
                     },
                     text: 'عربي',
@@ -57,7 +57,7 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return LoginPage();
+                        return LoginPage(lang: 1,);
                       }));
                     },
                     text: 'English',

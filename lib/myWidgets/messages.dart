@@ -3,8 +3,9 @@ import 'package:store_manager/api/apiRequests.dart';
 import 'package:store_manager/pages/dashboard.dart';
 
 class Messages {
-  Messages({required this.categoryID});
+  Messages({required this.categoryID, required this.lang});
   final categoryID;
+  final int lang;
   DatabaseHelper _databaseHelper = DatabaseHelper();
   void showMyDialog(
       {required context,
@@ -22,7 +23,7 @@ class Messages {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 11, 35, 55)),
                     child: new Text(
-                      'No',
+                      lang == 1 ?'No':"لا",
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -31,14 +32,16 @@ class Messages {
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.red),
                     child: new Text(
-                      'Yes',
+                      lang == 1 ?'Yes':"نعم",
                     ),
                     onPressed: () async {
                       await _databaseHelper.deleteCategory(
                           categoryID: categoryID.toString());
                       Navigator.push(context,
                           MaterialPageRoute(builder: (content) {
-                        return Dashboard();
+                        return Dashboard(
+                          lang: 0,
+                        );
                       }));
                     }),
               ]);
