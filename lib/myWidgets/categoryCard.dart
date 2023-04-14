@@ -9,7 +9,9 @@ class CategoryCard extends StatelessWidget {
     required this.categoryName,
     required this.image,
     required this.dategoryId,
+    required this.lang,
   }) : super(key: key);
+  final int lang;
   final String categoryName;
   final String image;
   final int dategoryId;
@@ -19,7 +21,8 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ItemsList(lang: 0,
+          return ItemsList(
+            lang: lang,
             categoryID: dategoryId,
           );
         }));
@@ -39,8 +42,7 @@ class CategoryCard extends StatelessWidget {
                   height: 10000,
                   width: 10000,
                   fit: BoxFit.fill,
-                )
-                ),
+                )),
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: BackdropFilter(

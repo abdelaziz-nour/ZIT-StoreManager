@@ -21,7 +21,7 @@ class OrderedItems extends StatelessWidget {
           backgroundColor: global.accent,
           elevation: 0,
           leading: BackButton(
-            color: Colors.black,
+            color: global.black,
             onPressed: () => {Navigator.pop(context)},
           ),
           title: Text(
@@ -38,7 +38,7 @@ class OrderedItems extends StatelessWidget {
                     children: [
                       Text(
                         'Total',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(color: global.black, fontSize: 20),
                       ),
                       Text(
                         '$total SDG',
@@ -55,7 +55,7 @@ class OrderedItems extends StatelessWidget {
                       ),
                       Text(
                         'المبلغ',
-                        style: TextStyle(color: Colors.black, fontSize: 20),
+                        style: TextStyle(color: global.black, fontSize: 20),
                       ),
                     ],
                   ),

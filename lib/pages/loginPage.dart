@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     TabController _controller = TabController(length: 2, vsync: this);
     Global global = Global();
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 228, 227, 232),
+        backgroundColor: global.accent,
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     child: TabBarView(
                       controller: _controller,
                       children: <Widget>[
-                        LoginForm(lang:lang),
+                        LoginForm(lang: lang),
                         Text(
                           'Comming Soon',
                           style: TextStyle(

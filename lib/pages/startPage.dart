@@ -10,7 +10,7 @@ class StartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Global global = Global();
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 228, 227, 232),
+      backgroundColor: global.accent,
       body: Column(
         children: [
           ClipRRect(
@@ -45,7 +45,9 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return LoginPage(lang: 0,);
+                        return LoginPage(
+                          lang: 0,
+                        );
                       }));
                     },
                     text: 'عربي',
@@ -57,7 +59,9 @@ class StartPage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return LoginPage(lang: 1,);
+                        return LoginPage(
+                          lang: 1,
+                        );
                       }));
                     },
                     text: 'English',

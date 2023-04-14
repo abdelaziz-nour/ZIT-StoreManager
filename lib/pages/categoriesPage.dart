@@ -83,26 +83,29 @@ class _CategoriesState extends State<Categories> {
                                       ? Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: CategoryCard(
-                                              dategoryId: _filteredData
-                                                  .elementAt(index)['id'],
-                                              image: _filteredData
-                                                  .elementAt(index)['Image'],
-                                              categoryName: _filteredData
-                                                  .elementAt(index)['Name']
-                                                  .toString()),
+                                            dategoryId: _filteredData
+                                                .elementAt(index)['id'],
+                                            image: _filteredData
+                                                .elementAt(index)['Image'],
+                                            categoryName: _filteredData
+                                                .elementAt(index)['Name']
+                                                .toString(),
+                                            lang: lang,
+                                          ),
                                         )
                                       : Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: CategoryCard(
-                                              dategoryId: snapshot.data
-                                                  .elementAt(index)['id'],
-                                              image: snapshot.data
-                                                  .elementAt(index)['Image'],
-                                              categoryName: snapshot.data
-                                                  .elementAt(index)['Name']
-                                                  .toString()),
+                                            dategoryId: snapshot.data
+                                                .elementAt(index)['id'],
+                                            image: snapshot.data
+                                                .elementAt(index)['Image'],
+                                            categoryName: snapshot.data
+                                                .elementAt(index)['Name']
+                                                .toString(),
+                                            lang: lang,
+                                          ),
                                         );
-                                  return null;
                                 }),
                           ],
                         )
