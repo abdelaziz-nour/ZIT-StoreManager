@@ -17,7 +17,7 @@ class DatabaseHelper {
             utf8.decode(data)); // Convert bytes to string and append to buffer
       },
       onDone: () {
-        print(buffer.toString()); // Print the accumulated response body
+        print(buffer.toString()); // //Print the accumulated response body
       },
       onError: (error) {
         print(
@@ -34,22 +34,22 @@ class DatabaseHelper {
     prefs.setString(key, value);
   }
 
-  loginData({required String username,required String password}) async {
+  loginData({required String username, required String password}) async {
     Uri myUrl = Uri.parse('http://vzzoz.pythonanywhere.com//login');
     final response = await http
         .post(myUrl, body: {"username": username, "password": password});
     var data = json.decode(response.body);
     success = data['success'];
-    print('success = $success');
+    //print('success = $success');
     if (success) {
       _save(data['data']['token']);
-      print(data['data']['token']);
+      //print(data['data']['token']);
     } else {
-      print(data['message']);
+      //print(data['message']);
     }
   }
 
-  getMyCategories() async {
+  Future<List> getMyCategories() async {
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
     final value = prefs.get(key) ?? 0;
@@ -59,7 +59,7 @@ class DatabaseHelper {
         headers: {'Authorization': 'token $value'}, body: {"Store": "1"});
     var data = json.decode(response.body);
     success = data['success'];
-    print(data['data']);
+    //print(data['data']);
     return data['data'];
   }
 
@@ -77,13 +77,13 @@ class DatabaseHelper {
     request.headers["Authorization"] = "token $value";
     request.fields["Name"] = categoryName;
     request.files.add(image);
-    print(image.toString());
+    //print(image.toString());
     var response = await request.send();
-    printStreamedResponse(response);
+    //printStreamedResponse(response);
   }
 
   Future<List> getMyProducts({required int categoryID}) async {
-    print(categoryID);
+    //print(categoryID);
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
     final value = prefs.get(key) ?? 0;
@@ -95,7 +95,7 @@ class DatabaseHelper {
         body: {"Category": categoryID.toString()});
     var data = json.decode(response.body);
     success = data['success'];
-    print(data);
+    //print(data);
     return data['data'];
   }
 
@@ -123,9 +123,9 @@ class DatabaseHelper {
     request.fields["Quantity"] = quantity.toString();
     request.fields["Category"] = categoryID.toString();
     request.files.add(image);
-    print(image.toString());
+    //print(image.toString());
     var response = await request.send();
-    printStreamedResponse(response);
+    //printStreamedResponse(response);
   }
 
   deleteCategory({required String categoryID}) async {
@@ -137,7 +137,7 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Category": categoryID});
-    print(response.body);
+    //print(response.body);
   }
 
   deleteProduct({required String productID}) async {
@@ -145,11 +145,11 @@ class DatabaseHelper {
     const key = 'token';
     final value = prefs.get(key) ?? 0;
     Uri myUrl = Uri.parse("http://vzzoz.pythonanywhere.com/deleteproduct");
-    print('productID : $productID');
+    //print('productID : $productID');
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Product": productID});
-    print(response.body);
+    //print(response.body);
   }
 
   addProductQuantity(
@@ -158,13 +158,13 @@ class DatabaseHelper {
     const key = 'token';
     final value = prefs.get(key) ?? 0;
     Uri myUrl = Uri.parse("http://vzzoz.pythonanywhere.com/addproductquantity");
-    print('productID : $productID');
+    //print('productID : $productID');
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Product": productID, "Quantity": quantity});
     var data = json.decode(response.body);
     success = data['success'];
-    print(response.body);
+    //print(response.body);
   }
 
   getMyorders() async {
@@ -177,7 +177,7 @@ class DatabaseHelper {
         headers: {'Authorization': 'token $value'}, body: {"Store": "1"});
     var data = json.decode(response.body);
     success = data['success'];
-    print(data['data']);
+    //print(data['data']);
     return data['data'];
   }
 }

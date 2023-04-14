@@ -75,33 +75,72 @@ class _ItemsListState extends State<ItemsList> {
                           context: context, categoryID: categoryID, lang: lang);
                     }),
               ),
-              FutureBuilder(
-                future:
-                    global.databaseHelper.getMyProducts(categoryID: categoryID),
-                builder: (context, snapshot) {
-                  return snapshot.hasData
-                      ? ListView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.isEmpty
-                              ? 0
-                              : snapshot.data!.length,
-                          itemBuilder: (context, i) {
-                            return ProductCard(
-                              id: snapshot.data![i]['id'],
-                              title: snapshot.data![i]['Name'],
-                              subtitle: snapshot.data![i]['Decription'],
-                              price: int.parse(snapshot.data![i]['Price']),
-                              quantity: snapshot.data![i]['Quantity'],
-                              image: snapshot.data![i]['Image'],
-                              lang: lang,
-                            );
-                          })
-                      : Center(
-                          child: CircularProgressIndicator(),
-                        );
-                },
-              ),
+              StreamBuilder(
+                  stream: global.databaseHelper
+                      .getMyProducts(categoryID: categoryID)
+                      .asStream(),
+                  builder: (context, snapshot) {
+                    return snapshot.hasData
+                        ? ListView.builder(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.isEmpty
+                                ? 0
+                                : snapshot.data!.length,
+                            itemBuilder: (context, i) {
+                              return snapshot.data![i]['Name']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(
+                                          (global.searchText.toLowerCase()))
+                                  ? ProductCard(
+                                      id: snapshot.data![i]['id'],
+                                      title: snapshot.data![i]['Name'],
+                                      subtitle: snapshot.data![i]['Decription'],
+                                      price:
+                                          int.parse(snapshot.data![i]['Price']),
+                                      quantity: snapshot.data![i]['Quantity'],
+                                      image: snapshot.data![i]['Image'],
+                                      lang: lang,
+                                    )
+                                  : Container();
+                            })
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          );
+                  }),
+              // FutureBuilder(
+              //   future:
+              //       global.databaseHelper.getMyProducts(categoryID: categoryID),
+              //   builder: (context, snapshot) {
+              //     return snapshot.hasData
+              //         ? ListView.builder(
+              //             primary: false,
+              //             shrinkWrap: true,
+              //             itemCount: snapshot.data!.isEmpty
+              //                 ? 0
+              //                 : snapshot.data!.length,
+              //             itemBuilder: (context, i) {
+              //               return snapshot.data![i]['Name']
+              //                       .toString()
+              //                       .contains(global.searchText)
+              //                   ? ProductCard(
+              //                       id: snapshot.data![i]['id'],
+              //                       title: snapshot.data![i]['Name'],
+              //                       subtitle: snapshot.data![i]['Decription'],
+              //                       price:
+              //                           int.parse(snapshot.data![i]['Price']),
+              //                       quantity: snapshot.data![i]['Quantity'],
+              //                       image: snapshot.data![i]['Image'],
+              //                       lang: lang,
+              //                     )
+              //                   : Container();
+              //             })
+              //         : Center(
+              //             child: CircularProgressIndicator(),
+              //           );
+              //   },
+              // ),
             ]),
           ),
         ));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:store_manager/globals.dart';
-import 'package:store_manager/globals.dart';
 
 class OrderedItems extends StatelessWidget {
   const OrderedItems({required this.orderedItems, required this.lang});
