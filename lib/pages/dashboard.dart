@@ -37,8 +37,7 @@ class _DashboardState extends State<Dashboard> {
         centerTitle: true,
         backgroundColor: global.accent,
         elevation: 0,
-        title: Text('Store Name',
-            style: TextStyle(color: Color.fromARGB(255, 76, 154, 203))),
+        title: Text('Store Name', style: TextStyle(color: global.primary)),
         leading: IconButton(
             onPressed: () {
               Navigator.pushAndRemoveUntil(

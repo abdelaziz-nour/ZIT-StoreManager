@@ -22,13 +22,13 @@ class _ItemsListState extends State<ItemsList> {
   Widget build(BuildContext context) {
     final Messages _messages = Messages(categoryID: categoryID, lang: lang);
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 237, 233, 243),
+        backgroundColor: global.accent,
         appBar: AppBar(
           centerTitle: true,
           backgroundColor: global.accent,
           elevation: 0,
           leading: BackButton(
-            color: Colors.black,
+            color: global.black,
             onPressed: () => {Navigator.pop(context)},
           ),
           title: Text(
@@ -47,7 +47,7 @@ class _ItemsListState extends State<ItemsList> {
                 },
                 icon: Icon(
                   Icons.delete,
-                  color: Colors.red,
+                  color: global.secondary,
                 ))
           ],
         ),

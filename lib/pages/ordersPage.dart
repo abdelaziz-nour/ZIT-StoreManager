@@ -23,7 +23,7 @@ class Orders extends StatelessWidget {
                       ),
                       Text(
                         'rders',
-                        style: TextStyle(color: Colors.black, fontSize: 30),
+                        style: TextStyle(color: global.black, fontSize: 30),
                       ),
                     ],
                   )
@@ -32,7 +32,7 @@ class Orders extends StatelessWidget {
                     children: [
                       Text(
                         'لبات',
-                        style: TextStyle(color: Colors.black, fontSize: 30),
+                        style: TextStyle(color: global.black, fontSize: 30),
                       ),
                       Text(
                         'الطـ',
