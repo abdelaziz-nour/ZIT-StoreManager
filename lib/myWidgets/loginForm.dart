@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_manager/myWidgets/loginMessage.dart';
 import 'package:store_manager/pages/dashboard.dart';
 import '../myAnimations/fadeAnimation.dart';
 import 'package:store_manager/globals.dart';
@@ -18,6 +19,7 @@ class _LoginFormState extends State<LoginForm> {
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
   Global global = Global();
+  LoginMessage loginMessage = LoginMessage();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -102,18 +104,24 @@ class _LoginFormState extends State<LoginForm> {
                     2,
                     GestureDetector(
                       onTap: () async {
+                        var data;
                         if (formKey.currentState!.validate()) {
-                          await global.databaseHelper.loginData(
+                          data = await global.databaseHelper.loginData(
                               username: usernameController.text.trim(),
                               password: passwordController.text);
                         }
                         if (global.databaseHelper.success == true) {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return Dashboard(lang: lang,);
+                            return Dashboard(
+                              lang: lang,
+                              storeID: data['StoreID'],
+                              storeName: data['StoreName'],
+                            );
                           }));
                         } else {
-                          print(global.databaseHelper.success);
+                          loginMessage.showMyDialog(
+                              context: context, lang: lang);
                         }
                       },
                       child: Container(

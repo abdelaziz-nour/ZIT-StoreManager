@@ -1,3 +1,4 @@
 {
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "cmake.sourceDirectory": "C:/Users/azizt/Documents/Flutter Projects/Doash/store_manager/windows/flutter"
 }

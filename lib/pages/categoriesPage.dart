@@ -5,18 +5,29 @@ import 'package:store_manager/myWidgets/searchBar.dart';
 import 'package:store_manager/globals.dart';
 
 class Categories extends StatefulWidget {
-  const Categories({Key? key, required this.lang});
+  const Categories(
+      {Key? key,
+      required this.lang,
+      required this.storeName,
+      required this.storeID});
   final int lang;
+  final int storeID;
+  final String storeName;
   @override
-  State<Categories> createState() => _CategoriesState(lang: lang);
+  State<Categories> createState() => _CategoriesState(lang: lang,storeID: storeID,storeName: storeName);
 }
 
 class _CategoriesState extends State<Categories> {
+  _CategoriesState({required this.lang,
+      required this.storeName,
+      required this.storeID});
   final int lang;
+  final int storeID;
+  final String storeName;
   Global global = Global();
   List _filteredData = [];
   void _filterData(String query, data) {
-    //print(data);
+    ////print(data);
     setState(() {
       _filteredData = data
           .where((item) =>
@@ -27,7 +38,6 @@ class _CategoriesState extends State<Categories> {
     });
   }
 
-  _CategoriesState({required this.lang});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +48,11 @@ class _CategoriesState extends State<Categories> {
           child: Column(
             children: [
               StreamBuilder<dynamic>(
-                stream: global.databaseHelper.getMyCategories().asStream(),
+                stream: global.databaseHelper
+                    .getMyCategories(storeID: storeID.toString())
+                    .asStream(),
                 builder: (context, snapshot) {
-                  //print(snapshot.data);
+                  ////print(snapshot.data);
                   return snapshot.hasData
                       ? Column(
                           children: [
@@ -83,6 +95,8 @@ class _CategoriesState extends State<Categories> {
                                       ? Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: CategoryCard(
+                                            storeID: storeID,
+                                            storeName: storeName,
                                             dategoryId: _filteredData
                                                 .elementAt(index)['id'],
                                             image: _filteredData
@@ -96,6 +110,8 @@ class _CategoriesState extends State<Categories> {
                                       : Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: CategoryCard(
+                                            storeID: storeID,
+                                            storeName: storeName,
                                             dategoryId: snapshot.data
                                                 .elementAt(index)['id'],
                                             image: snapshot.data

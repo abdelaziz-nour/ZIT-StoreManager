@@ -3,9 +3,11 @@ import 'package:store_manager/api/apiRequests.dart';
 import 'package:store_manager/pages/dashboard.dart';
 
 class Messages {
-  Messages({required this.categoryID, required this.lang});
+  Messages({required this.categoryID, required this.lang,required this.storeID,required this.storeName});
   final categoryID;
   final int lang;
+  final int storeID;
+  final String storeName;
   DatabaseHelper _databaseHelper = DatabaseHelper();
   void showMyDialog(
       {required context,
@@ -41,6 +43,8 @@ class Messages {
                           MaterialPageRoute(builder: (content) {
                         return Dashboard(
                           lang: 0,
+                          storeID: storeID,
+                          storeName: storeName,
                         );
                       }));
                     }),

@@ -17,11 +17,10 @@ class DatabaseHelper {
             utf8.decode(data)); // Convert bytes to string and append to buffer
       },
       onDone: () {
-        print(buffer.toString()); // //Print the accumulated response body
+        //print(buffer.toString()); // //Print the accumulated response body
       },
       onError: (error) {
-        print(
-            'Error: $error'); // Handle any errors that occur while reading the stream
+        print('Error: $error');
       },
       cancelOnError: true, // Cancel the stream on error
     );
@@ -35,31 +34,32 @@ class DatabaseHelper {
   }
 
   loginData({required String username, required String password}) async {
-    Uri myUrl = Uri.parse('http://vzzoz.pythonanywhere.com//login');
+    Uri myUrl = Uri.parse('http://vzzoz.pythonanywhere.com//storemanagerlogin');
     final response = await http
         .post(myUrl, body: {"username": username, "password": password});
     var data = json.decode(response.body);
     success = data['success'];
-    //print('success = $success');
+    ////print('success = $success');
     if (success) {
       _save(data['data']['token']);
-      //print(data['data']['token']);
+      print(data['data']);
+      return data['data'];
     } else {
-      //print(data['message']);
+      print(data['message']);
     }
   }
 
-  Future<List> getMyCategories() async {
+  Future<List> getMyCategories({required String storeID}) async {
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
     final value = prefs.get(key) ?? 0;
 
     Uri myUrl = Uri.parse('http://vzzoz.pythonanywhere.com/getstorecategories');
     var response = await http.post(myUrl,
-        headers: {'Authorization': 'token $value'}, body: {"Store": "1"});
+        headers: {'Authorization': 'token $value'}, body: {"Store": storeID});
     var data = json.decode(response.body);
     success = data['success'];
-    //print(data['data']);
+    // print(data['data']);
     return data['data'];
   }
 
@@ -77,13 +77,13 @@ class DatabaseHelper {
     request.headers["Authorization"] = "token $value";
     request.fields["Name"] = categoryName;
     request.files.add(image);
-    //print(image.toString());
+    ////print(image.toString());
     var response = await request.send();
     //printStreamedResponse(response);
   }
 
   Future<List> getMyProducts({required int categoryID}) async {
-    //print(categoryID);
+    ////print(categoryID);
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
     final value = prefs.get(key) ?? 0;
@@ -95,7 +95,7 @@ class DatabaseHelper {
         body: {"Category": categoryID.toString()});
     var data = json.decode(response.body);
     success = data['success'];
-    //print(data);
+    ////print(data);
     return data['data'];
   }
 
@@ -123,7 +123,7 @@ class DatabaseHelper {
     request.fields["Quantity"] = quantity.toString();
     request.fields["Category"] = categoryID.toString();
     request.files.add(image);
-    //print(image.toString());
+    ////print(image.toString());
     var response = await request.send();
     //printStreamedResponse(response);
   }
@@ -137,7 +137,7 @@ class DatabaseHelper {
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Category": categoryID});
-    //print(response.body);
+    ////print(response.body);
   }
 
   deleteProduct({required String productID}) async {
@@ -145,11 +145,11 @@ class DatabaseHelper {
     const key = 'token';
     final value = prefs.get(key) ?? 0;
     Uri myUrl = Uri.parse("http://vzzoz.pythonanywhere.com/deleteproduct");
-    //print('productID : $productID');
+    ////print('productID : $productID');
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Product": productID});
-    //print(response.body);
+    ////print(response.body);
   }
 
   addProductQuantity(
@@ -158,26 +158,40 @@ class DatabaseHelper {
     const key = 'token';
     final value = prefs.get(key) ?? 0;
     Uri myUrl = Uri.parse("http://vzzoz.pythonanywhere.com/addproductquantity");
-    //print('productID : $productID');
+    ////print('productID : $productID');
     var response = await http.post(myUrl,
         headers: {'Authorization': 'token $value'},
         body: {"Product": productID, "Quantity": quantity});
     var data = json.decode(response.body);
     success = data['success'];
-    //print(response.body);
+    ////print(response.body);
   }
 
-  getMyorders() async {
+  getMyOrders({required storeID}) async {
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
     final value = prefs.get(key) ?? 0;
 
     Uri myUrl = Uri.parse('http://vzzoz.pythonanywhere.com/getstoreorders');
     var response = await http.post(myUrl,
-        headers: {'Authorization': 'token $value'}, body: {"Store": "1"});
+        headers: {'Authorization': 'token $value'}, body: {"Store": storeID});
     var data = json.decode(response.body);
     success = data['success'];
     //print(data['data']);
     return data['data'];
+  }
+
+  changeOrderStatus({required String orderID, required String? status}) async {
+    final prefs = await SharedPreferences.getInstance();
+    const key = 'token';
+    final value = prefs.get(key) ?? 0;
+    Uri myUrl = Uri.parse("http://vzzoz.pythonanywhere.com/changeorderstatus");
+    ////print('productID : $productID');
+    var response = await http.post(myUrl,
+        headers: {'Authorization': 'token $value'},
+        body: {"Order": orderID, "Status": status});
+    var data = json.decode(response.body);
+    success = data['success'];
+    //print(response.body);
   }
 }

@@ -5,16 +5,20 @@ import 'ordersPage.dart';
 import 'package:store_manager/globals.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key, required this.lang});
+  const Dashboard({super.key, required this.lang,required this.storeID,required this.storeName});
   final int lang;
+  final int storeID;
+  final String storeName;
 
   @override
-  State<Dashboard> createState() => _DashboardState(lang: lang);
+  State<Dashboard> createState() => _DashboardState(lang: lang,storeID: storeID,storeName: storeName);
 }
 
 class _DashboardState extends State<Dashboard> {
-  _DashboardState({required this.lang});
+  _DashboardState({required this.lang,required this.storeID,required this.storeName});
   final int lang;
+  final int storeID;
+  final String storeName;
   Global global = Global();
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -29,15 +33,15 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[
-      Categories(lang: lang),
-      Orders(lang: lang),
+      Categories(lang: lang,storeID: storeID,storeName: storeName,),
+      Orders(lang: lang,storeID: storeID,storeName: storeName),
     ];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: global.accent,
         elevation: 0,
-        title: Text('Store Name', style: TextStyle(color: global.primary)),
+        title: Text(storeName, style: TextStyle(color: global.primary)),
         leading: IconButton(
             onPressed: () {
               Navigator.pushAndRemoveUntil(

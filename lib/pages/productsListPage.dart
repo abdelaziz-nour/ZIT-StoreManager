@@ -6,21 +6,27 @@ import 'package:store_manager/globals.dart';
 import '../myWidgets/AddProductForm.dart';
 
 class ItemsList extends StatefulWidget {
-  const ItemsList({super.key, required this.categoryID, required this.lang});
+  const ItemsList({super.key, required this.categoryID,required this.categoryName, required this.lang,required this.storeID,required this.storeName});
   final int lang;
   final int categoryID;
+  final String categoryName ;
+  final int storeID;
+  final String storeName ;
   @override
-  State<ItemsList> createState() => _ItemsListState(categoryID, lang: lang);
+  State<ItemsList> createState() => _ItemsListState(categoryID, lang: lang,storeID: storeID,storeName: storeName, categoryName: categoryName);
 }
 
 class _ItemsListState extends State<ItemsList> {
   Global global = Global();
   final int lang;
   final categoryID;
-  _ItemsListState(this.categoryID, {required this.lang});
+  final String categoryName;
+  final int storeID;
+  final String storeName ;
+  _ItemsListState(this.categoryID, {required this.lang,required this.categoryName,required this.storeID,required this.storeName});
   @override
   Widget build(BuildContext context) {
-    final Messages _messages = Messages(categoryID: categoryID, lang: lang);
+    final Messages _messages = Messages(categoryID: categoryID, lang: lang,storeID: storeID,storeName: storeName);
     return Scaffold(
         backgroundColor: global.accent,
         appBar: AppBar(
@@ -32,7 +38,7 @@ class _ItemsListState extends State<ItemsList> {
             onPressed: () => {Navigator.pop(context)},
           ),
           title: Text(
-            'Category Name',
+            categoryName,
             style: TextStyle(color: global.primary),
           ),
           actions: [

@@ -3,8 +3,10 @@ import 'package:store_manager/pages/orderedItemsPage.dart';
 import 'package:store_manager/globals.dart';
 
 class Orders extends StatelessWidget {
-  Orders({required this.lang});
+  Orders({required this.lang,required this.storeID,required this.storeName});
   final int lang;
+  final int storeID;
+  final String storeName;
   @override
   Widget build(BuildContext context) {
     Global global = Global();
@@ -41,14 +43,15 @@ class Orders extends StatelessWidget {
                     ],
                   ),
           ),
-          FutureBuilder<dynamic>(
-            future: global.databaseHelper.getMyorders(),
+          StreamBuilder<dynamic>(
+            stream: global.databaseHelper.getMyOrders(storeID: storeID.toString()).asStream(),
             builder: (context, snapshot) {
               return snapshot.hasData
                   ? ListView.builder(
                       shrinkWrap: true,
                       itemCount: snapshot.data.length - 1,
                       itemBuilder: (context, index) {
+                        //print(snapshot.data);
                         return Card(
                             elevation: 4,
                             child: ListTile(
@@ -57,12 +60,18 @@ class Orders extends StatelessWidget {
                                     MaterialPageRoute(builder: (context) {
                                   return OrderedItems(
                                       lang: lang,
+                                      storeID: storeID,
+                                      storeName: storeName,
+                                      id: snapshot.data[index]['id'],
+                                      location: snapshot.data[index]
+                                          ['Location'],
+                                      status: snapshot.data[index]['Status'],
                                       orderedItems: snapshot.data[index]
                                           ['OrderItems']);
                                 }));
                               },
-                              title:
-                                  Text(snapshot.data[index]['id'].toString()),
+                              title: Text(
+                                  '${snapshot.data[index]['id'].toString()}\n${snapshot.data[index]['Status'].toString()}'),
                               subtitle: Text(
                                 snapshot.data[index]['CreatedBy'].toString(),
                                 style: TextStyle(color: global.primary),
