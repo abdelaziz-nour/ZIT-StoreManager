@@ -6,14 +6,24 @@ import 'package:store_manager/globals.dart';
 import '../myWidgets/AddProductForm.dart';
 
 class ItemsList extends StatefulWidget {
-  const ItemsList({super.key, required this.categoryID,required this.categoryName, required this.lang,required this.storeID,required this.storeName});
+  const ItemsList(
+      {super.key,
+      required this.category,
+      required this.categoryName,
+      required this.lang,
+      required this.storeID,
+      required this.storeName});
   final int lang;
-  final int categoryID;
-  final String categoryName ;
-  final int storeID;
-  final String storeName ;
+  final String category;
+  final String categoryName;
+  final String storeID;
+  final String storeName;
   @override
-  State<ItemsList> createState() => _ItemsListState(categoryID, lang: lang,storeID: storeID,storeName: storeName, categoryName: categoryName);
+  State<ItemsList> createState() => _ItemsListState(category,
+      lang: lang,
+      storeID: storeID,
+      storeName: storeName,
+      categoryName: categoryName);
 }
 
 class _ItemsListState extends State<ItemsList> {
@@ -21,12 +31,20 @@ class _ItemsListState extends State<ItemsList> {
   final int lang;
   final categoryID;
   final String categoryName;
-  final int storeID;
-  final String storeName ;
-  _ItemsListState(this.categoryID, {required this.lang,required this.categoryName,required this.storeID,required this.storeName});
+  final String storeID;
+  final String storeName;
+  _ItemsListState(this.categoryID,
+      {required this.lang,
+      required this.categoryName,
+      required this.storeID,
+      required this.storeName});
   @override
   Widget build(BuildContext context) {
-    final Messages _messages = Messages(categoryID: categoryID, lang: lang,storeID: storeID,storeName: storeName);
+    final Messages _messages = Messages(
+        categoryID: categoryID,
+        lang: lang,
+        storeID: storeID,
+        storeName: storeName);
     return Scaffold(
         backgroundColor: global.accent,
         appBar: AppBar(
@@ -83,7 +101,7 @@ class _ItemsListState extends State<ItemsList> {
               ),
               StreamBuilder(
                   stream: global.databaseHelper
-                      .getMyProducts(categoryID: categoryID)
+                      .getMyProducts(categoryID: categoryID.toString())
                       .asStream(),
                   builder: (context, snapshot) {
                     return snapshot.hasData
@@ -102,7 +120,8 @@ class _ItemsListState extends State<ItemsList> {
                                   ? ProductCard(
                                       id: snapshot.data![i]['id'],
                                       title: snapshot.data![i]['Name'],
-                                      subtitle: snapshot.data![i]['Decription'],
+                                      subtitle: snapshot.data![i]
+                                          ['Description'],
                                       price:
                                           int.parse(snapshot.data![i]['Price']),
                                       quantity: snapshot.data![i]['Quantity'],
@@ -115,38 +134,6 @@ class _ItemsListState extends State<ItemsList> {
                             child: CircularProgressIndicator(),
                           );
                   }),
-              // FutureBuilder(
-              //   future:
-              //       global.databaseHelper.getMyProducts(categoryID: categoryID),
-              //   builder: (context, snapshot) {
-              //     return snapshot.hasData
-              //         ? ListView.builder(
-              //             primary: false,
-              //             shrinkWrap: true,
-              //             itemCount: snapshot.data!.isEmpty
-              //                 ? 0
-              //                 : snapshot.data!.length,
-              //             itemBuilder: (context, i) {
-              //               return snapshot.data![i]['Name']
-              //                       .toString()
-              //                       .contains(global.searchText)
-              //                   ? ProductCard(
-              //                       id: snapshot.data![i]['id'],
-              //                       title: snapshot.data![i]['Name'],
-              //                       subtitle: snapshot.data![i]['Decription'],
-              //                       price:
-              //                           int.parse(snapshot.data![i]['Price']),
-              //                       quantity: snapshot.data![i]['Quantity'],
-              //                       image: snapshot.data![i]['Image'],
-              //                       lang: lang,
-              //                     )
-              //                   : Container();
-              //             })
-              //         : Center(
-              //             child: CircularProgressIndicator(),
-              //           );
-              //   },
-              // ),
             ]),
           ),
         ));

@@ -7,7 +7,7 @@ import 'package:store_manager/globals.dart';
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key, required this.lang,required this.storeID,required this.storeName});
   final int lang;
-  final int storeID;
+  final String storeID;
   final String storeName;
 
   @override
@@ -17,7 +17,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   _DashboardState({required this.lang,required this.storeID,required this.storeName});
   final int lang;
-  final int storeID;
+  final String storeID;
   final String storeName;
   Global global = Global();
   int _selectedIndex = 0;

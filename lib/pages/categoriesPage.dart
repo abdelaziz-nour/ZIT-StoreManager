@@ -11,7 +11,7 @@ class Categories extends StatefulWidget {
       required this.storeName,
       required this.storeID});
   final int lang;
-  final int storeID;
+  final String storeID;
   final String storeName;
   @override
   State<Categories> createState() => _CategoriesState(lang: lang,storeID: storeID,storeName: storeName);
@@ -22,7 +22,7 @@ class _CategoriesState extends State<Categories> {
       required this.storeName,
       required this.storeID});
   final int lang;
-  final int storeID;
+  final String storeID;
   final String storeName;
   Global global = Global();
   List _filteredData = [];
@@ -113,7 +113,7 @@ class _CategoriesState extends State<Categories> {
                                             storeID: storeID,
                                             storeName: storeName,
                                             dategoryId: snapshot.data
-                                                .elementAt(index)['id'],
+                                                .elementAt(index)['id'].toString(),
                                             image: snapshot.data
                                                 .elementAt(index)['Image'],
                                             categoryName: snapshot.data

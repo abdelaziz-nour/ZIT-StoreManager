@@ -5,7 +5,7 @@ import 'package:store_manager/globals.dart';
 class Orders extends StatelessWidget {
   Orders({required this.lang,required this.storeID,required this.storeName});
   final int lang;
-  final int storeID;
+  final String storeID;
   final String storeName;
   @override
   Widget build(BuildContext context) {

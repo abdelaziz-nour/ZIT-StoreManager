@@ -17,7 +17,7 @@ class OrderedItems extends StatefulWidget {
   final location;
   final status;
   final id;
-  final int storeID;
+  final String storeID;
   final String storeName;
 
   @override
@@ -45,7 +45,7 @@ class _OrderedItemsState extends State<OrderedItems> {
   final location;
   late final status;
   final id;
-  final int storeID;
+  final String storeID;
   final String storeName;
 
   late String _selectedOption;

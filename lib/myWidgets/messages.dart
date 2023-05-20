@@ -6,7 +6,7 @@ class Messages {
   Messages({required this.categoryID, required this.lang,required this.storeID,required this.storeName});
   final categoryID;
   final int lang;
-  final int storeID;
+  final String storeID;
   final String storeName;
   DatabaseHelper _databaseHelper = DatabaseHelper();
   void showMyDialog(

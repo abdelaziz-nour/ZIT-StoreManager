@@ -4,7 +4,7 @@ import 'package:store_manager/myFunctions/myFunctions.dart';
 import 'package:store_manager/globals.dart';
 
 addProductDialog(
-    {required context, required int categoryID, required int lang}) {
+    {required context, required String categoryID, required int lang}) {
   final primaryColor = Color(0xff4338CA);
   final secondaryColor = Color(0xff6D28D9);
   final accentColor = Color(0xffffffff);
@@ -206,7 +206,7 @@ addProductDialog(
                                   if (formKey.currentState!.validate()) {
                                     await global.databaseHelper.addProduct(
                                         name: productNameController.text,
-                                        decription:
+                                        description:
                                             productSubtitleController.text,
                                         price: int.parse(
                                             productPriceController.text),

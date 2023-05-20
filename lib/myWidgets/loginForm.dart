@@ -115,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
                               MaterialPageRoute(builder: (context) {
                             return Dashboard(
                               lang: lang,
-                              storeID: data['StoreID'],
+                              storeID: data['StoreID'].toString(),
                               storeName: data['StoreName'],
                             );
                           }));

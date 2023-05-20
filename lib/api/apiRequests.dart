@@ -82,7 +82,7 @@ class DatabaseHelper {
     //printStreamedResponse(response);
   }
 
-  Future<List> getMyProducts({required int categoryID}) async {
+  Future<List> getMyProducts({required String categoryID}) async {
     ////print(categoryID);
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
@@ -95,16 +95,16 @@ class DatabaseHelper {
         body: {"Category": categoryID.toString()});
     var data = json.decode(response.body);
     success = data['success'];
-    ////print(data);
+    print(data);
     return data['data'];
   }
 
   addProduct(
       {required String name,
-      required String decription,
+      required String description,
       required int price,
       required int quantity,
-      required int categoryID,
+      required String categoryID,
       required image}) async {
     final prefs = await SharedPreferences.getInstance();
     const key = 'token';
@@ -115,10 +115,11 @@ class DatabaseHelper {
       'POST',
       Uri.parse("http://vzzoz.pythonanywhere.com/addproduct"),
     );
+    // Description
 
     request.headers["Authorization"] = "token $value";
     request.fields["Name"] = name;
-    request.fields["Decription"] = decription;
+    request.fields["Description"] = description;
     request.fields["Price"] = price.toString();
     request.fields["Quantity"] = quantity.toString();
     request.fields["Category"] = categoryID.toString();

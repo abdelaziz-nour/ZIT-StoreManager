@@ -15,8 +15,8 @@ class CategoryCard extends StatelessWidget {
   final int lang;
   final String categoryName;
   final String image;
-  final int dategoryId;
-  final int storeID;
+  final String dategoryId;
+  final String storeID;
   final String storeName ;
 
   @override
@@ -25,10 +25,11 @@ class CategoryCard extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return ItemsList(
+
             categoryName: categoryName,
             lang: lang,
-            categoryID: dategoryId,
-            storeID: storeID,
+            category: dategoryId.toString(),
+            storeID: storeID.toString(),
             storeName: storeName,
           );
         }));

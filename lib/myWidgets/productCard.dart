@@ -5,7 +5,7 @@ import 'package:store_manager/globals.dart';
 import '../myAnimations/fadeAnimation.dart';
 
 class ProductCard extends StatefulWidget {
-  final int id;
+  final  id;
   final String title;
   final String subtitle;
   final int quantity;
@@ -38,7 +38,7 @@ class ProductCard extends StatefulWidget {
 }
 
 class ProductCardState extends State<ProductCard> {
-  final int id;
+  final  id;
   final String title;
   final String subtitle;
   int quantity;
