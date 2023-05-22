@@ -14,21 +14,23 @@ class Categories extends StatefulWidget {
   final String storeID;
   final String storeName;
   @override
-  State<Categories> createState() => _CategoriesState(lang: lang,storeID: storeID,storeName: storeName);
+  State<Categories> createState() =>
+      _CategoriesState(lang: lang, storeID: storeID, storeName: storeName);
 }
 
 class _CategoriesState extends State<Categories> {
-  _CategoriesState({required this.lang,
-      required this.storeName,
-      required this.storeID});
+  _CategoriesState(
+      {required this.lang, required this.storeName, required this.storeID});
   final int lang;
   final String storeID;
   final String storeName;
   Global global = Global();
   List _filteredData = [];
+  bool first = true;
   void _filterData(String query, data) {
     ////print(data);
     setState(() {
+      first = false;
       _filteredData = data
           .where((item) =>
               item['Name']!.toLowerCase().contains(query.toLowerCase())
@@ -76,7 +78,10 @@ class _CategoriesState extends State<Categories> {
                                           fontSize: 20),
                                     ),
                                     onPressed: () {
-                                      addCategory(context: context, lang: lang);
+                                      addCategory(
+                                          context: context,
+                                          lang: lang,
+                                          edit: false);
                                     }),
                               ),
                             ),
@@ -97,7 +102,7 @@ class _CategoriesState extends State<Categories> {
                                           child: CategoryCard(
                                             storeID: storeID,
                                             storeName: storeName,
-                                            dategoryId: _filteredData
+                                            categoryId: _filteredData
                                                 .elementAt(index)['id'],
                                             image: _filteredData
                                                 .elementAt(index)['Image'],
@@ -107,21 +112,25 @@ class _CategoriesState extends State<Categories> {
                                             lang: lang,
                                           ),
                                         )
-                                      : Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: CategoryCard(
-                                            storeID: storeID,
-                                            storeName: storeName,
-                                            dategoryId: snapshot.data
-                                                .elementAt(index)['id'].toString(),
-                                            image: snapshot.data
-                                                .elementAt(index)['Image'],
-                                            categoryName: snapshot.data
-                                                .elementAt(index)['Name']
-                                                .toString(),
-                                            lang: lang,
-                                          ),
-                                        );
+                                      : first == true
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: CategoryCard(
+                                                storeID: storeID,
+                                                storeName: storeName,
+                                                categoryId: snapshot.data
+                                                    .elementAt(index)['id']
+                                                    .toString(),
+                                                image: snapshot.data
+                                                    .elementAt(index)['Image'],
+                                                categoryName: snapshot.data
+                                                    .elementAt(index)['Name']
+                                                    .toString(),
+                                                lang: lang,
+                                              ),
+                                            )
+                                          : Container();
                                 }),
                           ],
                         )

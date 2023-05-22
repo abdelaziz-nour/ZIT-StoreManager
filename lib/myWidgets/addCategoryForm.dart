@@ -8,7 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:io';
 
-addCategory({required context, required lang}) {
+addCategory(
+    {required context, required lang, required bool edit, String? categoryID}) {
   final primaryColor = Color(0xff4338CA);
   final secondaryColor = Color(0xff6D28D9);
   final accentColor = Color(0xffffffff);
@@ -46,7 +47,7 @@ addCategory({required context, required lang}) {
                 const SizedBox(
                   height: 15,
                 ),
-                Text(lang == 1 ? "Add New Category" : "اضافة فئة جديدة",
+                Text(lang == 1 ? "Category Informations" : "بيانات الفئة",
                     style: TextStyle(
                         color: accentColor,
                         fontSize: 18,
@@ -68,7 +69,9 @@ addCategory({required context, required lang}) {
                               errorStyle: TextStyle(fontSize: 20),
                               hintText:
                                   lang == 1 ? "Category Name" : "إسم الفئة",
-                              hintStyle: TextStyle(color: Colors.grey[400],)),
+                              hintStyle: TextStyle(
+                                color: Colors.grey[400],
+                              )),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return lang == 1
@@ -131,27 +134,83 @@ addCategory({required context, required lang}) {
                               ))),
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              if (imageFile == null) {
-                                final imageBytes =
-                                    await rootBundle.load('assets/zit.jpg');
-                                final imageData =
-                                    imageBytes.buffer.asUint8List();
-                                final multipartFile =
-                                    http.MultipartFile.fromBytes(
-                                  'Image',
-                                  imageData,
-                                  filename: 'zit.jpg',
-                                  contentType: MediaType('image', 'png'),
-                                );
-                                await global.databaseHelper.addCategory(
-                                    image: multipartFile,
-                                    categoryName: categoryNameController.text);
+                              if (edit == false) {
+                                if (imageFile == null) {
+                                  final imageBytes =
+                                      await rootBundle.load('assets/zit.jpg');
+                                  final imageData =
+                                      imageBytes.buffer.asUint8List();
+                                  final multipartFile =
+                                      http.MultipartFile.fromBytes(
+                                    'Image',
+                                    imageData,
+                                    filename: 'zit.jpg',
+                                    contentType: MediaType('image', 'png'),
+                                  );
+                                  await global.databaseHelper.addCategory(
+                                      image: multipartFile,
+                                      categoryName:
+                                          categoryNameController.text);
+                                } else {
+                                  await global.databaseHelper.addCategory(
+                                      image: imageFile,
+                                      categoryName:
+                                          categoryNameController.text);
+                                }
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                        backgroundColor: Colors.white,
+                                        content: Center(
+                                            child: Text(
+                                          lang == 1
+                                              ? 'Category Added Successfully'
+                                              : "تم إضافة الفئة بنجاح",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.green[900],
+                                              fontStyle: FontStyle.italic),
+                                        ))));
+                                Navigator.pop(context);
                               } else {
-                                await global.databaseHelper.addCategory(
-                                    image: imageFile,
-                                    categoryName: categoryNameController.text);
+                                if (imageFile == null) {
+                                  final imageBytes =
+                                      await rootBundle.load('assets/zit.jpg');
+                                  final imageData =
+                                      imageBytes.buffer.asUint8List();
+                                  final multipartFile =
+                                      http.MultipartFile.fromBytes(
+                                    'Image',
+                                    imageData,
+                                    filename: 'zit.jpg',
+                                    contentType: MediaType('image', 'png'),
+                                  );
+                                  await global.databaseHelper.editCategory(
+                                      categoryID: categoryID,
+                                      image: multipartFile,
+                                      categoryName:
+                                          categoryNameController.text);
+                                } else {
+                                  await global.databaseHelper.editCategory(
+                                      categoryID: categoryID,
+                                      image: imageFile,
+                                      categoryName:
+                                          categoryNameController.text);
+                                }
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                        backgroundColor: Colors.white,
+                                        content: Center(
+                                            child: Text(
+                                          lang == 1
+                                              ? 'Category Updated Successfully'
+                                              : "تم تحديث الفئة بنجاح",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.green[900],
+                                              fontStyle: FontStyle.italic),
+                                        ))));
+                                Navigator.pop(context);
                               }
-                              Navigator.pop(context);
                             }
                           },
                           child: Text(

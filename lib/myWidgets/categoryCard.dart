@@ -3,21 +3,24 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:store_manager/pages/productsListPage.dart';
 
+import 'addCategoryForm.dart';
+
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({
-    Key? key,
-    required this.categoryName,
-    required this.image,
-    required this.dategoryId,
-    required this.lang,
-    required this.storeID,required this.storeName
-  }) : super(key: key);
+  const CategoryCard(
+      {Key? key,
+      required this.categoryName,
+      required this.image,
+      required this.categoryId,
+      required this.lang,
+      required this.storeID,
+      required this.storeName})
+      : super(key: key);
   final int lang;
   final String categoryName;
   final String image;
-  final String dategoryId;
+  final String categoryId;
   final String storeID;
-  final String storeName ;
+  final String storeName;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +28,16 @@ class CategoryCard extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return ItemsList(
-
             categoryName: categoryName,
             lang: lang,
-            category: dategoryId.toString(),
+            category: categoryId.toString(),
             storeID: storeID.toString(),
             storeName: storeName,
           );
         }));
+      },
+      onLongPress: () {
+        addCategory(context: context,lang: lang,edit: true,categoryID: categoryId);
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

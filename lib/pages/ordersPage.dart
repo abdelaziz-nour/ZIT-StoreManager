@@ -1,96 +1,174 @@
 import 'package:flutter/material.dart';
 import 'package:store_manager/pages/orderedItemsPage.dart';
 import 'package:store_manager/globals.dart';
+import '../myWidgets/searchBar.dart';
 
-class Orders extends StatelessWidget {
-  Orders({required this.lang,required this.storeID,required this.storeName});
+class Orders extends StatefulWidget {
+  Orders({
+    Key? key,
+    required this.lang,
+    required this.storeID,
+    required this.storeName,
+  }) : super(key: key);
+
   final int lang;
   final String storeID;
   final String storeName;
+
+  @override
+  State<Orders> createState() => _OrdersState();
+}
+
+class _OrdersState extends State<Orders> {
+  Global global = Global();
+  List<dynamic> _data = [];
+  List<dynamic> _filteredData = [];
+  bool firstRender = true;
+
+  void _filterData(String query) {
+    setState(() {
+      firstRender = false;
+      _filteredData = _data
+          .where((item) =>
+              item['id'].toString().toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final data =
+        await global.databaseHelper.getMyOrders(storeID: widget.storeID);
+    setState(() {
+      _data = data ?? []; // Handle null case
+      _filteredData = data ?? []; // Handle null case
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Global global = Global();
     return Scaffold(
-        backgroundColor: global.accent,
-        body: ListView(shrinkWrap: true, children: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: lang == 1
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'O',
-                        style: TextStyle(color: global.primary, fontSize: 30),
-                      ),
-                      Text(
-                        'rders',
-                        style: TextStyle(color: global.black, fontSize: 30),
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'لبات',
-                        style: TextStyle(color: global.black, fontSize: 30),
-                      ),
-                      Text(
-                        'الطـ',
-                        style: TextStyle(color: global.primary, fontSize: 30),
-                      ),
-                    ],
-                  ),
-          ),
-          StreamBuilder<dynamic>(
-            stream: global.databaseHelper.getMyOrders(storeID: storeID.toString()).asStream(),
-            builder: (context, snapshot) {
-              return snapshot.hasData
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data.length - 1,
-                      itemBuilder: (context, index) {
-                        //print(snapshot.data);
-                        return Card(
-                            elevation: 4,
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return OrderedItems(
-                                      lang: lang,
-                                      storeID: storeID,
-                                      storeName: storeName,
-                                      id: snapshot.data[index]['id'],
-                                      location: snapshot.data[index]
-                                          ['Location'],
-                                      status: snapshot.data[index]['Status'],
-                                      orderedItems: snapshot.data[index]
-                                          ['OrderItems']);
-                                }));
-                              },
-                              title: Text(
-                                  '${snapshot.data[index]['id'].toString()}\n${snapshot.data[index]['Status'].toString()}'),
-                              subtitle: Text(
-                                snapshot.data[index]['CreatedBy'].toString(),
-                                style: TextStyle(color: global.primary),
-                              ),
-                              trailing: Text(
-                                snapshot.data[index]['CreatedOn']
-                                        .substring(0, 10) +
-                                    '\n' +
-                                    snapshot.data[index]['CreatedOn']
-                                        .substring(11, 16),
-                              ),
-                            ));
-                      },
+      backgroundColor: global.accent,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: widget.lang == 1
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'O',
+                          style: TextStyle(color: global.primary, fontSize: 30),
+                        ),
+                        Text(
+                          'rders',
+                          style: TextStyle(color: global.black, fontSize: 30),
+                        ),
+                      ],
                     )
-                  : Center(
-                      child: CircularProgressIndicator(),
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'لبات',
+                          style: TextStyle(color: global.black, fontSize: 30),
+                        ),
+                        Text(
+                          'الطـ',
+                          style: TextStyle(color: global.primary, fontSize: 30),
+                        ),
+                      ],
+                    ),
+            ),
+            SearchInputFb1(
+              hintText: widget.lang == 1 ? 'Search ...' : "البحث...",
+              onchange: (value) => _filterData(value),
+            ),
+            if (_filteredData.isNotEmpty)
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: _filteredData.length - 1 == 0
+                    ? _filteredData.length
+                    : _filteredData.length - 1,
+                itemBuilder: (context, index) {
+                  if (_filteredData[index].containsKey('id')) {
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 4,
+                      child: ListTile(
+                        onTap: () {
+                          // ... your navigation code
+                        },
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _filteredData[index]['id'],
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Text(
+                              _filteredData[index]['Status'],
+                              style: TextStyle(
+                                fontSize: 18,
+                                color:
+                                    _filteredData[index]['Status'] == 'Canceled'
+                                        ? Colors.red
+                                        : _filteredData[index]['Status'] ==
+                                                'OnDelivery'
+                                            ? Colors.orange
+                                            : _filteredData[index]['Status'] ==
+                                                    'Preparing'
+                                                ? Colors.black
+                                                : Colors.green,
+                              ),
+                            ),
+                          ],
+                        ),
+                        subtitle: Text(
+                          _filteredData[index]['CreatedBy'].toString(),
+                          style: TextStyle(color: global.primary, fontSize: 18),
+                        ),
+                        trailing: Text(
+                          _filteredData[index]['CreatedOn']?.substring(0, 10),
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
                     );
-            },
-          ),
-        ]));
+                  } else {
+                    Center(
+                      child: Text(
+                        'No orders found.',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    );
+                  }
+                },
+              )
+            else if (!firstRender)
+              Center(
+                child: Text(
+                  'No orders found.',
+                  style: TextStyle(fontSize: 18),
+                ),
+              )
+            else
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -66,6 +66,7 @@ class _OrderedItemsState extends State<OrderedItems> {
     Map map = widget.orderedItems.asMap();
     //print(widget.orderedItems);
     return Scaffold(
+      backgroundColor: global.accent,
       appBar: AppBar(
           centerTitle: true,
           backgroundColor: global.accent,
@@ -135,14 +136,36 @@ class _OrderedItemsState extends State<OrderedItems> {
                           ].map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value),
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: value == 'Canceled'
+                                        ? Colors.red
+                                        : value == 'OnDelivery'
+                                            ? Colors.orange
+                                            : value == 'Preparing'
+                                                ? Colors.black
+                                                : Colors.green),
+                              ),
                             );
                           }).toList()
                         : <String>['OnDelivery', 'Delivered', 'Canceled']
                             .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value),
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: value == 'Canceled'
+                                        ? Colors.red
+                                        : value == 'OnDelivery'
+                                            ? Colors.orange
+                                            : value == 'Preparing'
+                                                ? Colors.black
+                                                : Colors.green),
+                              ),
                             );
                           }).toList(),
                   )),
@@ -150,12 +173,22 @@ class _OrderedItemsState extends State<OrderedItems> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: TextButton(
                     child: Text(widget.lang == 1 ? 'Save' : 'حفظ',
-                        style: TextStyle(
-                          fontSize: 20,
-                        )),
+                        style: TextStyle(fontSize: 20, color: global.primary)),
                     onPressed: () async {
                       await databaseHelper.changeOrderStatus(
-                          orderID: id.toString(), status: _selectedOption);
+                          orderID: id, status: _selectedOption);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.white,
+                          content: Center(
+                              child: Text(
+                            lang == 1
+                                ? 'Order Status Saved Successfully'
+                                : "تم حفظ حالة الطلب بنجاح",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.green[900],
+                                fontStyle: FontStyle.italic),
+                          ))));
                     },
                   )),
             ],
@@ -180,6 +213,7 @@ class _OrderedItemsState extends State<OrderedItems> {
                           widget.lang == 1 ? 'No' : "رقم",
                           style: TextStyle(
                               fontStyle: FontStyle.italic,
+                              fontSize: 18,
                               color: global.primary),
                         ),
                       ),
@@ -187,6 +221,7 @@ class _OrderedItemsState extends State<OrderedItems> {
                         label: Text(
                           widget.lang == 1 ? 'Product' : "المنتج",
                           style: TextStyle(
+                              fontSize: 18,
                               fontStyle: FontStyle.italic,
                               color: global.primary),
                         ),
@@ -195,6 +230,7 @@ class _OrderedItemsState extends State<OrderedItems> {
                         label: Text(
                           widget.lang == 1 ? 'Quantity' : "الكمية",
                           style: TextStyle(
+                            fontSize: 18,
                             fontStyle: FontStyle.italic,
                             color: global.primary,
                           ),
@@ -204,6 +240,7 @@ class _OrderedItemsState extends State<OrderedItems> {
                         label: Text(
                           widget.lang == 1 ? 'Price' : "السعر",
                           style: TextStyle(
+                              fontSize: 18,
                               fontStyle: FontStyle.italic,
                               color: global.primary),
                         ),
@@ -212,6 +249,7 @@ class _OrderedItemsState extends State<OrderedItems> {
                         label: Text(
                           widget.lang == 1 ? 'Subtotal' : "المجموع",
                           style: TextStyle(
+                              fontSize: 18,
                               fontStyle: FontStyle.italic,
                               color: global.primary),
                         ),
@@ -224,13 +262,27 @@ class _OrderedItemsState extends State<OrderedItems> {
                               DataCell(Text(
                                 (entry.key + 1).toString(),
                               )),
-                              DataCell(Text(entry.value['ProductName'])),
+                              DataCell(Text(
+                                entry.value['ProductName'],
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              )),
                               DataCell(Center(
-                                  child: Text(
-                                      (entry.value['Quantity']).toString()))),
-                              DataCell(Text((entry.value['Price']).toString())),
+                                  child:
+                                      Text((entry.value['Quantity']).toString(),
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                          )))),
+                              DataCell(Text((entry.value['Price']).toString(),
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ))),
                               DataCell(
-                                  Text((entry.value['Subtotal']).toString())),
+                                  Text((entry.value['Subtotal']).toString(),
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ))),
                             ],
                           ),
                         )

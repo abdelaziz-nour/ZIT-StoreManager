@@ -95,7 +95,7 @@ class DatabaseHelper {
         body: {"Category": categoryID.toString()});
     var data = json.decode(response.body);
     success = data['success'];
-    print(data);
+    // print(data);
     return data['data'];
   }
 
@@ -194,5 +194,56 @@ class DatabaseHelper {
     var data = json.decode(response.body);
     success = data['success'];
     //print(response.body);
+  }
+
+  editProduct({
+    required String? productID,
+    required String name,
+    required String description,
+    required int price,
+    required int quantity,
+    required image,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    const key = 'token';
+    final value = prefs.get(key) ?? 0;
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("http://vzzoz.pythonanywhere.com/updateproduct"),
+    );
+    request.headers["Authorization"] = "token $value";
+    request.fields["Product"] = productID!;
+    request.fields["Name"] = name;
+    request.fields["Description"] = description;
+    request.fields["Price"] = price.toString();
+    request.fields["Quantity"] = quantity.toString();
+    request.files.add(image);
+    var response = await request.send();
+    // print(response.statusCode);
+    printStreamedResponse(response);
+  }
+
+  editCategory(
+      {required String categoryName,
+      required image,
+      required String? categoryID}) async {
+    final prefs = await SharedPreferences.getInstance();
+    const key = 'token';
+    final value = prefs.get(key) ?? 0;
+
+    // send the request
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("http://vzzoz.pythonanywhere.com/updatecategory"),
+    );
+
+    request.headers["Authorization"] = "token $value";
+    request.fields["Category"] = categoryID!;
+    request.fields["Name"] = categoryName;
+    request.files.add(image);
+    ////print(image.toString());
+    var response = await request.send();
+    print(response.statusCode);
+    printStreamedResponse(response);
   }
 }

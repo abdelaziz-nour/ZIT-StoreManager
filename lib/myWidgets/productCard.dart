@@ -3,21 +3,24 @@ import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:store_manager/globals.dart';
 import '../myAnimations/fadeAnimation.dart';
+import 'AddProductForm.dart';
 
 class ProductCard extends StatefulWidget {
-  final  id;
+  final id;
   final String title;
   final String subtitle;
   final int quantity;
   final int price;
   final image;
   final int lang;
+  final String categoryID;
 
   const ProductCard({
     required this.title,
     required this.subtitle,
     required this.price,
     required this.quantity,
+    required this.categoryID,
     Key? key,
     required this.image,
     required this.id,
@@ -27,24 +30,25 @@ class ProductCard extends StatefulWidget {
   @override
   // ignore: no_logic_in_create_state
   State<ProductCard> createState() => ProductCardState(
-        id: id,
-        title: title,
-        subtitle: subtitle,
-        price: price,
-        quantity: quantity,
-        image: image,
-        lang: lang,
-      );
+      id: id,
+      title: title,
+      subtitle: subtitle,
+      price: price,
+      quantity: quantity,
+      image: image,
+      lang: lang,
+      categoryID: categoryID);
 }
 
 class ProductCardState extends State<ProductCard> {
-  final  id;
+  final id;
   final String title;
   final String subtitle;
   int quantity;
   final int price;
   final image;
   final int lang;
+  final String categoryID;
 
   ProductCardState({
     required this.lang,
@@ -53,6 +57,7 @@ class ProductCardState extends State<ProductCard> {
     required this.subtitle,
     required this.price,
     required this.quantity,
+    required this.categoryID,
     required this.image,
     Key? key,
   });
@@ -89,6 +94,7 @@ class ProductCardState extends State<ProductCard> {
       buttonState(true);
     }
   }
+
   Global global = Global();
   @override
   Widget build(BuildContext context) {
@@ -105,7 +111,33 @@ class ProductCardState extends State<ProductCard> {
                 color: Colors.red,
                 icon: Icons.delete,
                 onTap: () async {
-                  await global.databaseHelper.deleteProduct(productID: id.toString());
+                  await global.databaseHelper
+                      .deleteProduct(productID: id.toString());
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.white,
+                      content: Center(
+                          child: Text(
+                        lang == 1
+                            ? 'Product Deleted Successfully'
+                            : "تم حذف المنتج بنجاح",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.green[900],
+                            fontStyle: FontStyle.italic),
+                      ))));
+                },
+              ),
+              IconSlideAction(
+                caption: lang == 1 ? 'Edit' : "تعديل",
+                color: Colors.white,
+                icon: Icons.edit_sharp,
+                onTap: () {
+                  addProductDialog(
+                      context: context,
+                      categoryID: categoryID,
+                      lang: lang,
+                      productID: id,
+                      edit: true);
                 },
               ),
             ],
@@ -132,9 +164,19 @@ class ProductCardState extends State<ProductCard> {
                             fit: BoxFit.fill,
                           ),
                         )),
-                    title: Text(title),
-                    subtitle: Text('$subtitle\n$quantity'),
-                    trailing: Text('$price\nSDG'),
+                    title: Text(
+                      title,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('$subtitle', style: TextStyle(fontSize: 15)),
+                        Text('$quantity', style: TextStyle(fontSize: 15)),
+                      ],
+                    ),
+                    trailing:
+                        Text('$price\nSDG', style: TextStyle(fontSize: 15)),
                     isThreeLine: true,
                   ),
                   _ispressed == true

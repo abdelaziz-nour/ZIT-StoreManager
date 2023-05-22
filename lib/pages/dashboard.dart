@@ -5,17 +5,23 @@ import 'ordersPage.dart';
 import 'package:store_manager/globals.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key, required this.lang,required this.storeID,required this.storeName});
+  const Dashboard(
+      {super.key,
+      required this.lang,
+      required this.storeID,
+      required this.storeName});
   final int lang;
   final String storeID;
   final String storeName;
 
   @override
-  State<Dashboard> createState() => _DashboardState(lang: lang,storeID: storeID,storeName: storeName);
+  State<Dashboard> createState() =>
+      _DashboardState(lang: lang, storeID: storeID, storeName: storeName);
 }
 
 class _DashboardState extends State<Dashboard> {
-  _DashboardState({required this.lang,required this.storeID,required this.storeName});
+  _DashboardState(
+      {required this.lang, required this.storeID, required this.storeName});
   final int lang;
   final String storeID;
   final String storeName;
@@ -33,8 +39,12 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _widgetOptions = <Widget>[
-      Categories(lang: lang,storeID: storeID,storeName: storeName,),
-      Orders(lang: lang,storeID: storeID,storeName: storeName),
+      Categories(
+        lang: lang,
+        storeID: storeID,
+        storeName: storeName,
+      ),
+      Orders(lang: lang, storeID: storeID, storeName: storeName),
     ];
     return Scaffold(
       appBar: AppBar(
@@ -57,6 +67,23 @@ class _DashboardState extends State<Dashboard> {
               Icons.logout_sharp,
               color: global.primary,
             )),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            color: global.primary,
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => Dashboard(
+                          lang: lang,
+                          storeID: storeID,
+                          storeName: storeName,
+                        )),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

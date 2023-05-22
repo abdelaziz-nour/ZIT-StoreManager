@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'pages/startPage.dart';
 
 void main() {
@@ -11,6 +11,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: StartPage());
+    return MaterialApp(
+        theme: ThemeData(
+            fontFamily: GoogleFonts.amiri(
+                    fontWeight: FontWeight.bold, fontStyle: FontStyle.italic)
+                .fontFamily),
+        home: StartPage());
   }
 }

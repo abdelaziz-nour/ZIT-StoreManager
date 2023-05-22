@@ -4,7 +4,11 @@ import 'package:store_manager/myFunctions/myFunctions.dart';
 import 'package:store_manager/globals.dart';
 
 addProductDialog(
-    {required context, required String categoryID, required int lang}) {
+    {required context,
+    required String categoryID,
+    required int lang,
+    String? productID,
+    required bool edit}) {
   final primaryColor = Color(0xff4338CA);
   final secondaryColor = Color(0xff6D28D9);
   final accentColor = Color(0xffffffff);
@@ -50,7 +54,7 @@ addProductDialog(
                     const SizedBox(
                       height: 15,
                     ),
-                    Text(lang == 1 ? "Add New Product" : "اضافة منتج جديد",
+                    Text(lang == 1 ? "Product Infromations" : "بيانات المنتج",
                         style: TextStyle(
                             color: accentColor,
                             fontSize: 18,
@@ -173,6 +177,7 @@ addProductDialog(
                                   ))),
                               onPressed: () async {
                                 imageFile = await myFunctions.getFromGallery();
+                                // print(imageFile);
                               },
                               child: Text(
                                 lang == 1 ? 'Add Image' : "اضافة صورة",
@@ -204,17 +209,59 @@ addProductDialog(
                               onPressed: () async {
                                 try {
                                   if (formKey.currentState!.validate()) {
-                                    await global.databaseHelper.addProduct(
-                                        name: productNameController.text,
-                                        description:
-                                            productSubtitleController.text,
-                                        price: int.parse(
-                                            productPriceController.text),
-                                        quantity: int.parse(
-                                            productQuantityController.text),
-                                        categoryID: categoryID,
-                                        image: imageFile);
-                                    Navigator.pop(context);
+                                    if (edit == false) {
+                                      await global.databaseHelper.addProduct(
+                                          name: productNameController.text,
+                                          description:
+                                              productSubtitleController.text,
+                                          price: int.parse(
+                                              productPriceController.text),
+                                          quantity: int.parse(
+                                              productQuantityController.text),
+                                          categoryID: categoryID,
+                                          image: imageFile);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.white,
+                                              content: Center(
+                                                  child: Text(
+                                                lang == 1
+                                                    ? 'Product Added Successfully'
+                                                    : "تم إضافة المنتج بنجاح",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.green[900],
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ))));
+                                      Navigator.pop(context);
+                                    } else {
+                                      await global.databaseHelper.editProduct(
+                                          productID: productID,
+                                          name: productNameController.text,
+                                          description:
+                                              productSubtitleController.text,
+                                          price: int.parse(
+                                              productPriceController.text),
+                                          quantity: int.parse(
+                                              productQuantityController.text),
+                                          image: imageFile);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.white,
+                                              content: Center(
+                                                  child: Text(
+                                                lang == 1
+                                                    ? 'Product Edited Successfully'
+                                                    : "تم تعديل المنتج بنجاح",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.green[900],
+                                                    fontStyle:
+                                                        FontStyle.italic),
+                                              ))));
+                                      Navigator.pop(context);
+                                    }
                                   }
                                 } catch (e) {
                                   return myFunctions.noImageField(
