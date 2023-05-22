@@ -16,10 +16,16 @@ class Orders extends StatefulWidget {
   final String storeName;
 
   @override
-  State<Orders> createState() => _OrdersState();
+  State<Orders> createState() => _OrdersState(lang: lang,storeID: storeID,storeName: storeName);
 }
 
 class _OrdersState extends State<Orders> {
+  _OrdersState({required this.lang,
+    required this.storeID,
+    required this.storeName,});
+    final int lang;
+  final String storeID;
+  final String storeName;
   Global global = Global();
   List<dynamic> _data = [];
   List<dynamic> _filteredData = [];
@@ -45,8 +51,8 @@ class _OrdersState extends State<Orders> {
     final data =
         await global.databaseHelper.getMyOrders(storeID: widget.storeID);
     setState(() {
-      _data = data ?? []; // Handle null case
-      _filteredData = data ?? []; // Handle null case
+      _data = data ; // Handle null case
+      _filteredData = data ; // Handle null case
     });
   }
 
@@ -108,7 +114,18 @@ class _OrdersState extends State<Orders> {
                       elevation: 4,
                       child: ListTile(
                         onTap: () {
-                          // ... your navigation code
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return OrderedItems(
+                                lang: lang,
+                                storeID: storeID,
+                                storeName: storeName,
+                                id: _filteredData[index]['id'],
+                                location: _filteredData[index]['Location'],
+                                status: _filteredData[index]['Status'],
+                                orderedItems: _filteredData[index]
+                                    ['OrderItems']);
+                          }));
                         },
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

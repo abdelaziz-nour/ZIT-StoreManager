@@ -48,8 +48,8 @@ class _ItemsListState extends State<ItemsList> {
   Future<void> fetchData() async {
     final data = await global.databaseHelper.getMyProducts(categoryID: widget.category);
     setState(() {
-      _data = data ?? [];
-      _filteredData = data ?? [];
+      _data = data;
+      _filteredData = data;
       _isLoading = false;
     });
   }

@@ -42,7 +42,7 @@ class DatabaseHelper {
     ////print('success = $success');
     if (success) {
       _save(data['data']['token']);
-      print(data['data']);
+      // print(data['data']);
       return data['data'];
     } else {
       print(data['message']);
